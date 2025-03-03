@@ -1,0 +1,169 @@
+/* /css/userdashboard.css */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    text-align: center;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    color: #333;
+}
+
+.room-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* 5 rooms per row */
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.room-icon {
+    width: 100px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    cursor: pointer; /* Make icons clickable */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+}
+
+.room-icon:hover {
+    transform: scale(1.1); /* Slightly enlarge the icon on hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.available {
+    background: linear-gradient(to bottom right, #2ecc71, #27ae60); /* Green gradient */
+}
+
+.occupied {
+    background: linear-gradient(to bottom right, #e74c3c, #c0392b); /* Red gradient */
+}
+
+.disabled {
+    background: #ccc; /* Grayed-out color for non-clickable rooms */
+    cursor: not-allowed; /* Disable pointer events */
+}
+
+.tooltip {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%; /* Position above the icon */
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.room-icon:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Modal Styles */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: 8px;
+    width: 300px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content label {
+    display: block;
+    margin: 10px 0 5px;
+    font-weight: bold;
+}
+
+.modal-content input,
+.modal-content button {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.modal-content button {
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+}
+
+.modal-content button:hover {
+    background-color: #0056b3;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: #000;
+}
+
+/* Show Rented Room Button */
+#show-rented-room {
+    margin-top: 20px;
+    padding: 15px 30px; /* Larger button */
+    font-size: 18px; /* Bigger text */
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 200px; /* Fixed width for better appearance */
+}
+
+#show-rented-room:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+#show-rented-room:hover:not(:disabled) {
+    background-color: #0056b3;
+}
