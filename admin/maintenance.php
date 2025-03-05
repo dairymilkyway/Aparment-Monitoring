@@ -21,7 +21,7 @@
                     <?php if ($request['status'] != 'resolved'): ?>
                     <form method="post" action="utils/resolve_maintenance.php">
                         <input type="hidden" name="id" value="<?php echo htmlspecialchars($request['id']); ?>">
-                        <button type="submit">Resolve</button>
+                        <button type="submit">Resolved</button>
                     </form>
                     <?php endif; ?>
                 </td>

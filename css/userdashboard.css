@@ -226,3 +226,40 @@ button:hover {
 button:active {
     transform: scale(0.98);
 }
+.ticket {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+    position: relative;
+}
+.ticket-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.ticket-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+}
+.ticket-status {
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    color: white;
+}
+.ticket-status.pending {
+    background-color: #ffc107;
+}
+.ticket-status.resolved {
+    background-color: #28a745;
+}
+.ticket-body {
+    margin-bottom: 10px;
+}
+.ticket-footer {
+    font-size: 0.9rem;
+    color: #666;
+}

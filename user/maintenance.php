@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $description = $_POST['description'];
         $reason = $_POST['reason'];
         $room_number = $_POST['room_number'];
-        $query = "INSERT INTO maintenance_requests (tenant_id, description, reason, status) VALUES (?, ?, ?, 'Pending')";
+        $query = "INSERT INTO maintenance_requests (tenant_id, description, reason, status, created_at) VALUES (?, ?, ?, 'Pending', NOW())";
         $stmt = $conn->prepare($query);
         $stmt->execute([$_SESSION['user_id'], $description, $reason]);
         
