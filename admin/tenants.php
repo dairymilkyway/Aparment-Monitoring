@@ -5,7 +5,7 @@
             <tr>
                 <th>ID</th>
                 <th>Name</th>
-                <th>Apartment</th>
+                <th>Room</th>
                 <th>Contact</th>
             </tr>
         </thead>

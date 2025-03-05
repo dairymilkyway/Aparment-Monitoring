@@ -30,12 +30,8 @@ if (isset($_SESSION['user_id']) && $_SESSION['role'] == 'user') {
         <?php if (isset($_SESSION['user_id'])): ?>
             <!-- Logged-in user -->
             <span>Welcome, <?php echo htmlspecialchars($_SESSION['role']); ?>!</span>
-            <?php if ($rented_room): ?>
-                <a href="<?php echo $root_path; ?>user/dashboard.php">Dashboard</a>
-                <a href="<?php echo $root_path; ?>user/maintenance.php">Submit Maintenance Request</a>
-            <?php else: ?>
-                <a href="<?php echo $root_path; ?>user/dashboard.php">Request Room</a>
-            <?php endif; ?>
+            <a href="<?php echo $root_path; ?>user/dashboard.php">Dashboard</a>
+            <a href="<?php echo $root_path; ?>user/request_room.php">Rent Room</a>
             <a href="<?php echo $root_path; ?>logout.php" class="logout-btn">Logout</a>
         <?php else: ?>
             <!-- Guest -->

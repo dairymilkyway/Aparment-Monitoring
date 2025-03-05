@@ -5,36 +5,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'admin') {
     exit();
 }
 include "../includes/db.php";
-
-// Fetch tenant information
-$query = "SELECT * FROM tenants";
-$stmt = $conn->prepare($query);
-$stmt->execute();
-$tenants = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-// Fetch rent payment information
-$query = "SELECT * FROM payments";
-$stmt = $conn->prepare($query);
-$stmt->execute();
-$payments = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-// Fetch maintenance requests
-$query = "SELECT * FROM maintenance_requests";
-$stmt = $conn->prepare($query);
-$stmt->execute();
-$maintenance_requests = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-// Fetch user information
-$query = "SELECT * FROM users";
-$stmt = $conn->prepare($query);
-$stmt->execute();
-$users = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-// Fetch room information
-$query = "SELECT * FROM rooms";
-$stmt = $conn->prepare($query);
-$stmt->execute();
-$rooms = $stmt->fetchAll(PDO::FETCH_ASSOC);
+include "fetch.php";
 ?>
 
 <!DOCTYPE html>
@@ -45,22 +16,35 @@ $rooms = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <title>Admin Dashboard</title>
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/admin_dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script>
         function showSection(sectionId) {
             // Hide all sections
-            document.getElementById('tenants-section').style.display = 'none';
-            document.getElementById('payments-section').style.display = 'none';
-            document.getElementById('maintenance-section').style.display = 'none';
-            document.getElementById('users-section').style.display = 'none';
-            document.getElementById('rooms-section').style.display = 'none';
+            document.querySelectorAll('.section').forEach(section => {
+                section.style.display = 'none';
+            });
             
             // Show the selected section
             document.getElementById(sectionId).style.display = 'block';
         }
         
+        function toggleDropdown() {
+            var dropdownContent = document.getElementById("dropdown-content");
+            if (dropdownContent.style.display === "block") {
+                dropdownContent.style.display = "none";
+            } else {
+                dropdownContent.style.display = "block";
+            }
+        }
+        
         // Show the tenants section by default
         window.onload = function() {
             showSection('tenants-section');
+            
+            // Show the rooms section if there's a success or error message
+            <?php if (isset($_SESSION['success_message']) || isset($_SESSION['error_message'])): ?>
+                showSection('rooms-section');
+            <?php endif; ?>
         }
     </script>
 </head>
@@ -69,14 +53,40 @@ $rooms = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <div class="sidebar">
             <h2>Admin Dashboard</h2>
             <ul>
-                <li><a href="#" onclick="showSection('tenants-section')">Manage Tenants</a></li>
-                <li><a href="#" onclick="showSection('payments-section')">Track Rent Payments</a></li>
-                <li><a href="#" onclick="showSection('maintenance-section')">Handle Maintenance Requests</a></li>
+                <li><a href="#" onclick="showSection('tenants-section')">Tenants</a></li>
+                <li><a href="#" onclick="showSection('payments-section')">Rent Payments</a></li>
+                <li><a href="#" onclick="showSection('maintenance-section')">Maintenance Requests</a></li>
+                <li>
+                    <a href="#" onclick="toggleDropdown()">Manage Rooms</a>
+                    <ul id="dropdown-content" style="display: none;">
+                        <li><a href="#" onclick="showSection('rooms-section')">Rooms</a></li>
+                        <li><a href="#" onclick="showSection('room-requests-section')">Requests</a></li>
+                    </ul>
+                </li>
                 <li><a href="#" onclick="showSection('users-section')">Manage Users</a></li>
-                <li><a href="#" onclick="showSection('rooms-section')">Manage Rooms</a></li>
+                <li><a href="../logout.php">Logout</a></li>
             </ul>
         </div>
         <div class="content">
+            <!-- Flash Messages -->
+            <?php if (isset($_SESSION['success_message'])): ?>
+                <div class="flash-message success">
+                    <?php 
+                        echo $_SESSION['success_message']; 
+                        unset($_SESSION['success_message']);
+                    ?>
+                </div>
+            <?php endif; ?>
+            
+            <?php if (isset($_SESSION['error_message'])): ?>
+                <div class="flash-message error">
+                    <?php 
+                        echo $_SESSION['error_message']; 
+                        unset($_SESSION['error_message']);
+                    ?>
+                </div>
+            <?php endif; ?>
+            
             <!-- Include Tenants Section -->
             <?php include "tenants.php"; ?>
             
@@ -91,6 +101,9 @@ $rooms = $stmt->fetchAll(PDO::FETCH_ASSOC);
             
             <!-- Include Rooms Section -->
             <?php include "rooms.php"; ?>
+            
+            <!-- Include Room Requests Section -->
+            <?php include "room_requests.php"; ?>
         </div>
     </div>
 </body>

@@ -23,6 +23,10 @@
                     <input type="text" id="name" name="name" required>
                 </div>
                 <div class="input-group">
+                    <label for="contact">Contact</label>
+                    <input type="text" id="contact" name="contact" required>
+                </div>
+                <div class="input-group">
                     <label for="pax">Number of Person (Pax)</label>
                     <select id="pax" name="pax" required>
                         <option value="1">1 Pax</option>

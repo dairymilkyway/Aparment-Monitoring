@@ -5,7 +5,6 @@
             <tr>
                 <th>ID</th>
                 <th>Username</th>
-                <th>Email</th>
                 <th>Role</th>
             </tr>
         </thead>
@@ -14,7 +13,6 @@
             <tr>
                 <td><?php echo htmlspecialchars($user['id']); ?></td>
                 <td><?php echo htmlspecialchars($user['username']); ?></td>
-                <td><?php echo htmlspecialchars($user['email']); ?></td>
                 <td><?php echo htmlspecialchars($user['role']); ?></td>
             </tr>
             <?php endforeach; ?>

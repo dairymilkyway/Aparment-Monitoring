@@ -73,6 +73,16 @@ p {
     color: white;
 }
 
+.room-card.rented {
+    background: linear-gradient(to bottom right, #007bff, #0056b3);
+    color: white;
+}
+
+.room-card.pending-request {
+    background: linear-gradient(to bottom right, #ff9800, #f57c00);
+    color: white;
+}
+
 .room-number {
     font-size: 28px;
     font-weight: bold;
@@ -113,10 +123,19 @@ p {
     opacity: 1;
 }
 
+.room-card.occupied:hover .room-status {
+    content: "View Details";
+    background-color: rgba(0, 123, 255, 0.8);
+}
+
+.room-card.pending-request:hover .room-status {
+    opacity: 0;
+}
+
 .room-card.occupied:hover {
-    cursor: default;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transform: translateY(-6px);
+    box-shadow: 0 12px 20px rgba(0,0,0,0.15);
 }
 
 .room-card.pending:hover {
