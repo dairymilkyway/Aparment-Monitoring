@@ -17,6 +17,12 @@ include "fetch.php";
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/admin_dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <script>
         function showSection(sectionId) {
             // Hide all sections
@@ -106,5 +112,10 @@ include "fetch.php";
             <?php include "room_requests.php"; ?>
         </div>
     </div>
+    <script>
+        $(document).ready(function() {
+            $('table').DataTable();
+        });
+    </script>
 </body>
 </html>
