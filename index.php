@@ -171,16 +171,6 @@ if (isset($_SESSION['user_id'])) {
         </div>
     </div>
     
-    <div class="testimonial-section">
-        <div class="container">
-            <h2>What Our Users Say</h2>
-            <div class="testimonial">
-                <p>"This system has completely transformed how I manage my apartment rentals. Everything is so much easier now!"</p>
-                <p><strong>— John D., Property Manager</strong></p>
-            </div>
-        </div>
-    </div>
-    
     <div class="cta-section">
         <div class="container">
             <h2>Ready to get started?</h2>

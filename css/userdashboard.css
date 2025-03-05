@@ -263,3 +263,604 @@ button:active {
     font-size: 0.9rem;
     color: #666;
 }
+
+/* Add these styles at the end of the file */
+
+/* Modern Form Styling */
+form {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    margin-top: 25px;
+    max-width: 650px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.form-header {
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.form-header h2 {
+    font-size: 1.8rem;
+    color: #333;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.form-header p {
+    color: #666;
+    font-size: 1rem;
+}
+
+.input-group {
+    margin-bottom: 25px;
+    position: relative;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+}
+
+.input-group input,
+.input-group select,
+.input-group textarea {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1px solid #e1e1e1;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    color: #333;
+    background-color: #fcfcfc;
+}
+
+.input-group input:focus,
+.input-group select:focus,
+.input-group textarea:focus {
+    outline: none;
+    border-color: #2196F3;
+    box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.15);
+    background-color: #fff;
+}
+
+.input-group input[readonly] {
+    background-color: #f5f7fa;
+    color: #687992;
+    border-color: #e1e5eb;
+    cursor: not-allowed;
+}
+
+.input-group select {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23555' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    background-size: 16px;
+    padding-right: 40px;
+}
+
+.input-group textarea {
+    min-height: 150px;
+    resize: vertical;
+    line-height: 1.6;
+}
+
+button.btn-primary {
+    background: linear-gradient(135deg, #2196F3 0%, #0d6efd 100%);
+    color: white;
+    border: none;
+    padding: 14px 28px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: block;
+    width: 100%;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 12px rgba(13, 110, 253, 0.25);
+}
+
+button.btn-primary:hover {
+    background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(13, 110, 253, 0.35);
+}
+
+button.btn-primary:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 8px rgba(13, 110, 253, 0.25);
+}
+
+/* Form animation */
+.input-group input,
+.input-group select,
+.input-group textarea {
+    transform: translateY(0);
+    opacity: 1;
+    animation: fadeInUp 0.5s ease forwards;
+    animation-delay: calc(var(--animation-order) * 0.1s);
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Form icon indicators */
+.input-icon {
+    display: flex;
+    align-items: center;
+}
+
+.input-icon i {
+    margin-right: 10px;
+    color: #666;
+}
+
+/* Form responsive adjustments */
+@media (max-width: 768px) {
+    form {
+        padding: 20px;
+    }
+    
+    .input-group input,
+    .input-group select,
+    .input-group textarea {
+        padding: 12px 14px;
+    }
+}
+
+/* Add these styles to enhance the select dropdown with icons */
+
+.select-with-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.selected-icon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #555;
+    font-size: 1.2rem;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.select-with-icon select {
+    padding-left: 48px !important;
+}
+
+/* Style for the icon dropdown options - this will be used in the custom dropdown */
+.issue-icon {
+    margin-right: 10px;
+    width: 18px;
+    display: inline-block;
+    text-align: center;
+}
+
+/* Custom dropdown items with icons */
+.custom-option {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.custom-option:hover {
+    background-color: #f5f5f5;
+}
+
+.custom-option i {
+    margin-right: 10px;
+    width: 20px;
+    text-align: center;
+}
+
+/* Add these styles at the end of the file */
+
+/* Modern Ticket System Styling */
+.requests-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.new-request-btn {
+    background: linear-gradient(135deg, #2196F3 0%, #0d6efd 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(13, 110, 253, 0.25);
+}
+
+.new-request-btn:hover {
+    background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(13, 110, 253, 0.35);
+}
+
+.filter-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    background-color: #f5f7fa;
+    border-radius: 10px;
+    padding: 12px 16px;
+}
+
+.filter-label {
+    font-weight: 600;
+    color: #555;
+    margin-right: 16px;
+}
+
+.filter-buttons {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    background-color: transparent;
+    border: 2px solid #e1e5eb;
+    border-radius: 6px;
+    padding: 8px 14px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #555;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.filter-btn:hover {
+    border-color: #0d6efd;
+    color: #0d6efd;
+}
+
+.filter-btn.active {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+    color: white;
+}
+
+.ticket-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.ticket {
+    display: flex;
+    background-color: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ticket:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.ticket-icon {
+    padding: 20px 0 20px 20px;
+    display: flex;
+    align-items: flex-start;
+}
+
+.icon-wrapper {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    color: white;
+}
+
+.icon-wrapper.pending {
+    background: linear-gradient(135deg, #FF9800 0%, #ED8C00 100%);
+}
+
+.icon-wrapper.in-progress, .icon-wrapper.inprogress {
+    background: linear-gradient(135deg, #2196F3 0%, #0d6efd 100%);
+}
+
+.icon-wrapper.resolved {
+    background: linear-gradient(135deg, #4CAF50 0%, #43a047 100%);
+}
+
+.ticket-content {
+    flex: 1;
+    padding: 20px;
+}
+
+.ticket-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.ticket-title {
+    display: flex;
+    align-items: center;
+}
+
+.ticket-title h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.ticket-id {
+    color: #999;
+    font-size: 13px;
+    margin-left: 8px;
+    font-weight: 500;
+}
+
+.ticket-status-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.ticket-status {
+    padding: 4px 12px;
+    border-radius: 50px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.ticket-status.pending {
+    background-color: #FFF3E0;
+    color: #FF9800;
+}
+
+.ticket-status.inprogress, .ticket-status.in-progress {
+    background-color: #E3F2FD;
+    color: #2196F3;
+}
+
+.ticket-status.resolved {
+    background-color: #E8F5E9;
+    color: #4CAF50;
+}
+
+.ticket-summary {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 12px;
+    line-height: 1.5;
+}
+
+.ticket-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    color: #888;
+}
+
+.ticket-meta {
+    display: flex;
+    gap: 16px;
+}
+
+.ticket-meta span {
+    display: flex;
+    align-items: center;
+}
+
+.ticket-meta i {
+    margin-right: 4px;
+}
+
+.expand-btn {
+    background: none;
+    border: none;
+    color: #aaa;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.expand-btn:hover {
+    background-color: #f0f0f0;
+    color: #555;
+}
+
+.ticket-details {
+    border-top: 1px solid #eee;
+    margin-top: 16px;
+    padding-top: 16px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.details-section {
+    margin-bottom: 20px;
+}
+
+.details-section:last-child {
+    margin-bottom: 0;
+}
+
+.details-section h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    margin: 0 0 8px 0;
+}
+
+.details-section p {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.response-section {
+    background-color: #f5f7fa;
+    border-radius: 8px;
+    padding: 16px;
+}
+
+.staff-response {
+    position: relative;
+    padding-left: 8px;
+    border-left: 3px solid #0d6efd;
+}
+
+.timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid #eee;
+}
+
+.timeline-item {
+    display: flex;
+    gap: 16px;
+}
+
+.timeline-marker {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    position: relative;
+}
+
+.timeline-marker:before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    height: calc(100% + 16px);
+    width: 2px;
+    background-color: #eee;
+}
+
+.timeline-item:last-child .timeline-marker:before {
+    display: none;
+}
+
+.timeline-marker.submitted {
+    background-color: #FF9800;
+}
+
+.timeline-marker.inprogress {
+    background-color: #2196F3;
+}
+
+.timeline-marker.resolved {
+    background-color: #4CAF50;
+}
+
+.timeline-content {
+    flex: 1;
+}
+
+.timeline-content h4 {
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.timeline-content p {
+    font-size: 13px;
+    color: #888;
+    margin: 4px 0 0 0;
+}
+
+.resolved-date {
+    color: #4CAF50;
+}
+
+.no-requests {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 40px 20px;
+    text-align: center;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.no-requests-icon {
+    font-size: 48px;
+    color: #e1e5eb;
+    margin-bottom: 16px;
+}
+
+.no-requests h3 {
+    font-size: 18px;
+    margin: 0 0 8px;
+}
+
+.no-requests p {
+    color: #777;
+    margin: 0 0 24px;
+}
+
+/* Responsive designs */
+@media (max-width: 768px) {
+    .ticket {
+        flex-direction: column;
+    }
+    
+    .ticket-icon {
+        padding: 20px 20px 0 20px;
+    }
+    
+    .icon-wrapper {
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+    }
+    
+    .ticket-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+    
+    .ticket-meta {
+        flex-direction: column;
+        gap: 8px;
+    }
+}

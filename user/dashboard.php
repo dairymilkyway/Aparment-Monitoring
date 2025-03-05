@@ -58,6 +58,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/userdashboard.css">
     <link rel="stylesheet" href="../css/modal.css">
+    <!-- Add Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script>
         function showRentedRoomDetails() {
             // Open the modal
@@ -106,29 +108,38 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <h1>User Dashboard</h1>
 
         <?php if ($rented_room): ?>
-            <h2>Your Rented Room</h2>
-            <div class="room-grid">
-                <div class="room-card rented" onclick="showRentedRoomDetails()">
-                    <div class="room-number"><?php echo htmlspecialchars($rented_room['room_number']); ?></div>
-                    <div class="room-status">Occupied</div>
+            <section class="dashboard-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-home"></i> Your Rented Room</h2>
                 </div>
-            </div>
+                <div class="room-grid">
+                    <div class="room-card rented" onclick="showRentedRoomDetails()">
+                        <div class="room-number"><?php echo htmlspecialchars($rented_room['room_number']); ?></div>
+                        <div class="room-price">₱<?php echo htmlspecialchars($rented_room['amount']); ?>/mo</div>
+                        <div class="room-status">Occupied</div>
+                    </div>
+                </div>
+            </section>
         <?php endif; ?>
 
-        <h2>Pending Room Requests</h2>
-        <?php if (count($pending_requests) > 0): ?>
-            <div class="room-grid">
-                <?php foreach ($pending_requests as $request): ?>
-                    <div class="room-card pending-request">
-                        <div class="room-number"><?php echo htmlspecialchars($request['room_number']); ?></div>
-                        <div class="room-price">₱<?php echo htmlspecialchars($request['price']); ?></div>
-                        <div class="room-status">Pending</div>
-                    </div>
-                <?php endforeach; ?>
+        <section class="dashboard-section">
+            <div class="section-header">
+                <h2><i class="fas fa-clock"></i> Pending Room Requests</h2>
             </div>
-        <?php else: ?>
-            <p>No Pending Request for Room</p>
-        <?php endif; ?>
+            <?php if (count($pending_requests) > 0): ?>
+                <div class="room-grid">
+                    <?php foreach ($pending_requests as $request): ?>
+                        <div class="room-card pending-request">
+                            <div class="room-number"><?php echo htmlspecialchars($request['room_number']); ?></div>
+                            <div class="room-price">₱<?php echo htmlspecialchars($request['price']); ?></div>
+                            <div class="room-status">Pending</div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php else: ?>
+                <p>No pending requests for rooms</p>
+            <?php endif; ?>
+        </section>
         
         <!-- Include Success Modal -->
         <?php include "success_modal.php"; ?>
@@ -139,15 +150,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <button type="button" class="modal-close" onclick="closeRentedRoomDetailsModal()">&times;</button>
                 <div class="modal-header">
                     <h2 class="modal-title">Rented Room Details</h2>
+                    <p class="modal-subtitle">Details about your current room rental</p>
                 </div>
                 <div class="modal-body">
-                    <p><strong>Room Number:</strong> <span id="modal-rented-room-number"></span></p>
-                    <p><strong>Date Approved:</strong> <span id="modal-date-approved"></span></p>
-                    <p><strong>Due Date:</strong> <span id="modal-due-date"></span></p>
-                    <p><strong>Amount to be Paid:</strong> ₱<span id="modal-amount"></span></p>
+                    <div class="room-preview">
+                        <div class="room-preview-card rented">
+                            <span id="modal-rented-room-number" style="font-size: 24px; font-weight: 700;"></span>
+                        </div>
+                        <div class="room-preview-info">
+                            <p><strong>Date Approved:</strong> <span id="modal-date-approved"></span></p>
+                            <p><strong>Due Date:</strong> <span id="modal-due-date"></span></p>
+                            <p><strong>Monthly Amount:</strong> ₱<span id="modal-amount"></span></p>
+                        </div>
+                    </div>
+                    
                     <form method="GET" action="maintenance.php">
                         <input type="hidden" id="room-number" name="room_number" value="">
-                        <button type="submit" class="btn-primary">Submit Maintenance Request</button>
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-wrench"></i>&nbsp; Submit Maintenance Request
+                        </button>
                     </form>
                 </div>
             </div>

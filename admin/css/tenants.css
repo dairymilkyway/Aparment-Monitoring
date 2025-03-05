@@ -1,0 +1,236 @@
+.tenants-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 30px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  }
+  
+  .tenants-table thead {
+    background: linear-gradient(135deg, #4361ee, #3a0ca3);
+    color: #fff;
+  }
+  
+  .tenants-table th {
+    padding: 20px 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.6px;
+    border: none;
+    text-align: left;
+  }
+  
+  .tenants-table tbody tr {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+    transition: all 0.3s ease;
+  }
+  
+  .tenants-table tbody tr:last-child {
+    border-bottom: none;
+  }
+  
+  .tenants-table tbody tr:hover {
+    background-color: rgba(67, 97, 238, 0.04);
+    transform: translateY(-2px);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.03);
+  }
+  
+  .tenants-table td {
+    padding: 16px;
+    vertical-align: middle;
+    color: #444;
+    font-size: 0.95rem;
+  }
+  
+  .tenants-table .tenant-name {
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .tenants-table .tenant-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+  
+  .tenants-table .tenant-actions button {
+    border: none;
+    background: none;
+    padding: 8px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .tenants-table .btn-view {
+    background-color: rgba(33, 150, 243, 0.08);
+    color: #2196f3;
+  }
+  
+  .tenants-table .btn-view:hover {
+    background-color: #2196f3;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(33, 150, 243, 0.25);
+  }
+  
+  .tenants-table .btn-edit {
+    background-color: rgba(76, 175, 80, 0.08);
+    color: #4caf50;
+  }
+  
+  .tenants-table .btn-edit:hover {
+    background-color: #4caf50;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(76, 175, 80, 0.25);
+  }
+  
+  .tenants-table .btn-delete {
+    background-color: rgba(244, 67, 54, 0.08);
+    color: #f44336;
+  }
+  
+  .tenants-table .btn-delete:hover {
+    background-color: #f44336;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(244, 67, 54, 0.25);
+  }
+  
+  .tenants-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  }
+  
+  .tenants-header .content-title {
+    font-size: 1.7rem;
+    color: #333;
+    font-weight: 700;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .tenants-header .content-title i {
+    background: linear-gradient(135deg, #4361ee, #3a0ca3);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 1.5rem;
+  }
+  
+  .tenant-add-btn {
+    background: linear-gradient(135deg, #4361ee, #3a0ca3);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 14px 22px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .tenant-add-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 7px 15px rgba(67, 97, 238, 0.3);
+  }
+  
+  .tenant-add-btn:active {
+    transform: translateY(-1px);
+  }
+  
+  .tenant-add-btn i {
+    font-size: 1.1rem;
+  }
+  
+  /* Search and filters section */
+  .tenant-filters {
+    margin-bottom: 25px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    background: white;
+    padding: 18px 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  }
+  
+  .tenant-search {
+    flex: 1;
+    position: relative;
+  }
+  
+  .tenant-search input {
+    width: 100%;
+    padding: 14px 20px 14px 45px;
+    border: 1px solid #e9ecef;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    background-color: #f8f9fa;
+  }
+  
+  .tenant-search input:focus {
+    outline: none;
+    border-color: #4361ee;
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+    background-color: #fff;
+  }
+  
+  .tenant-search i {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #adb5bd;
+  }
+  
+  /* Status indicators */
+  .status-indicator {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 8px;
+  }
+  
+  .status-active {
+    background-color: #4caf50;
+  }
+  
+  .status-inactive {
+    background-color: #f44336;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .tenants-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 15px;
+    }
+    
+    .tenant-filters {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    
+    .tenants-table .tenant-actions {
+      flex-direction: column;
+    }
+  }

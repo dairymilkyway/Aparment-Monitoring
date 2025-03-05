@@ -39,6 +39,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/userdashboard.css">
     <link rel="stylesheet" href="../css/modal.css">
+    <!-- Add Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script>
         function closeSuccessModal() {
             document.getElementById('success-modal').classList.remove('active');
@@ -58,24 +60,54 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <h1>Submit Maintenance Request</h1>
         
         <form method="POST" action="">
-            <div class="input-group">
+            <div class="form-header">
+                <h2>Maintenance Request Form</h2>
+                <p>Please provide details about the issue you're experiencing</p>
+            </div>
+            
+            <div class="input-group" style="--animation-order: 1">
                 <label for="room_number">Room Number</label>
                 <input type="text" id="room_number" name="room_number" value="<?php echo isset($_GET['room_number']) ? htmlspecialchars($_GET['room_number']) : ''; ?>" readonly>
             </div>
-            <div class="input-group">
-                <label for="reason">Reason</label>
-                <select id="reason" name="reason" required>
-                    <option value="Plumbing Issue">Plumbing Issue</option>
-                    <option value="Electrical Issue">Electrical Issue</option>
-                    <option value="Heating Issue">Heating Issue</option>
-                    <option value="Appliance Issue">Appliance Issue</option>
-                    <option value="Other">Other</option>
-                </select>
+            
+            <div class="input-group" style="--animation-order: 2">
+    <label>Issue Type</label>
+    <div class="issue-type-buttons">
+        <input type="hidden" name="reason" id="reason-input" value="" required>
+        
+        <button type="button" class="issue-button" data-value="Plumbing Issue">
+            <i class="fa-solid fa-faucet"></i>
+            <span>Plumbing</span>
+        </button>
+        
+        <button type="button" class="issue-button" data-value="Electrical Issue">
+            <i class="fa-solid fa-bolt"></i>
+            <span>Electrical</span>
+        </button>
+        
+        <button type="button" class="issue-button" data-value="Heating Issue">
+            <i class="fa-solid fa-temperature-high"></i>
+            <span>Heating</span>
+        </button>
+        
+        <button type="button" class="issue-button" data-value="Appliance Issue">
+            <i class="fa-solid fa-tv"></i>
+            <span>Appliance</span>
+        </button>
+        
+        <button type="button" class="issue-button" data-value="Other">
+            <i class="fa-solid fa-question-circle"></i>
+            <span>Other</span>
+        </button>
+    </div>
+    <div class="error-message" id="reason-error" style="display: none;">Please select an issue type</div>
+</div>
+            
+            <div class="input-group" style="--animation-order: 3">
+                <label for="description">Description of the Issue</label>
+                <textarea id="description" name="description" placeholder="Please provide detailed information about the issue..." required></textarea>
             </div>
-            <div class="input-group">
-                <label for="description">Description</label>
-                <textarea id="description" name="description" required></textarea>
-            </div>
+            
             <button type="submit" class="btn-primary">Submit Request</button>
         </form>
         
@@ -99,3 +131,41 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
 </body>
 </html>
+
+
+<script>
+    // Add this to your existing JavaScript
+    document.addEventListener('DOMContentLoaded', function() {
+        const issueButtons = document.querySelectorAll('.issue-button');
+        const reasonInput = document.getElementById('reason-input');
+        const reasonError = document.getElementById('reason-error');
+        
+        // Handle button clicks
+        issueButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove selected class from all buttons
+                issueButtons.forEach(btn => btn.classList.remove('selected'));
+                
+                // Add selected class to clicked button
+                this.classList.add('selected');
+                
+                // Set the value in the hidden input
+                reasonInput.value = this.dataset.value;
+                
+                // Hide error message if shown
+                reasonError.style.display = 'none';
+            });
+        });
+        
+        // Form validation
+        document.querySelector('form').addEventListener('submit', function(e) {
+            if (!reasonInput.value) {
+                e.preventDefault();
+                reasonError.style.display = 'block';
+                
+                // Scroll to the error message
+                reasonError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        });
+    });
+</script>

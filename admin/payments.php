@@ -1,14 +1,42 @@
-<?php
-include "fetch.php";
-?>
+<!-- filepath: /c:/xampp/htdocs/apartment-monitoring/admin/payments.php -->
+<?php include "fetch.php"; ?>
 
 <div id="payments-section" class="section">
-    <h2>Track Rent Payments</h2>
-    <table>
+    <div class="payments-header">
+        <h2 class="content-title">
+            <i class="fas fa-money-bill-wave"></i> Track Rent Payments
+        </h2>
+    </div>
+    
+    <div class="payments-summary">
+        <div class="summary-card total-payments">
+            <div class="summary-icon"><i class="fas fa-chart-line"></i></div>
+            <div class="summary-details">
+                <h3>Total Payments</h3>
+                <p class="summary-value">₱<?php echo number_format($total_payments, 2); ?></p>
+            </div>
+        </div>
+        <div class="summary-card pending-payments">
+            <div class="summary-icon"><i class="fas fa-clock"></i></div>
+            <div class="summary-details">
+                <h3>Pending</h3>
+                <p class="summary-value">₱<?php echo number_format($pending_payments, 2); ?></p>
+            </div>
+        </div>
+        <div class="summary-card paid-payments">
+            <div class="summary-icon"><i class="fas fa-check-circle"></i></div>
+            <div class="summary-details">
+                <h3>Paid</h3>
+                <p class="summary-value">₱<?php echo number_format($paid_payments, 2); ?></p>
+            </div>
+        </div>
+    </div>
+    
+    <table class="payments-table">
         <thead>
             <tr>
                 <th>ID</th>
-                <th>Tenant ID</th>
+                <th>Tenant</th>
                 <th>Amount</th>
                 <th>Date Approved</th>
                 <th>Due Date</th>
@@ -20,20 +48,24 @@ include "fetch.php";
             <?php foreach ($payments as $payment): ?>
             <tr>
                 <td><?php echo htmlspecialchars($payment['id']); ?></td>
-                <td><?php echo htmlspecialchars($payment['tenant_id']); ?></td>
-                <td><?php echo htmlspecialchars($payment['amount']); ?></td>
+                <td class="tenant-name"><?php echo htmlspecialchars($payment['tenant_id']); ?></td>
+                <td class="payment-amount"><?php echo htmlspecialchars($payment['amount']); ?></td>
                 <td><?php echo htmlspecialchars($payment['date_approved']); ?></td>
-                <td><?php echo htmlspecialchars($payment['due_date']); ?></td>
-                <td><?php echo htmlspecialchars($payment['status']); ?></td>
+                <td class="payment-due <?php echo (strtotime($payment['due_date']) < time()) ? 'overdue' : ''; ?>"><?php echo htmlspecialchars($payment['due_date']); ?></td>
                 <td>
-                <?php if ($payment['status'] == 'not paid'): ?>
-                    <form method="POST" action="utils/update_payment_status.php" style="display:inline;">
-                        <input type="hidden" name="payment_id" value="<?php echo $payment['id']; ?>">
-                        <button type="submit" class="btn-primary">Mark as Paid</button>
-                    </form>
+                    <span class="payment-status <?php echo ($payment['status'] == 'paid') ? 'paid' : 'not-paid'; ?>">
+                        <?php echo htmlspecialchars($payment['status']); ?>
+                    </span>
+                </td>
+                <td class="payment-actions">
+                    <?php if ($payment['status'] == 'not paid'): ?>
+                    <button type="button" class="payment-action-btn btn-mark-paid">
+                        <i class="fas fa-check"></i> Mark Paid
+                    </button>
                     <?php endif; ?>
-                    <button type="button" class="btn-primary" onclick="showPaymentDetails(<?php echo $payment['id']; ?>)">👁️</button>
-                   
+                    <button type="button" class="payment-action-btn btn-view-details" onclick="showPaymentDetails(<?php echo $payment['id']; ?>)">
+                        <i class="fas fa-eye"></i> View
+                    </button>
                 </td>
             </tr>
             <?php endforeach; ?>
@@ -43,6 +75,9 @@ include "fetch.php";
 
 <!-- Include Payment Details Modal -->
 <?php include "utils/payment_details_modal.php"; ?>
+
+<!-- Link to CSS file -->
+<link rel="stylesheet" href="./css/payments.css">
 
 <script>
     function showPaymentDetails(paymentId) {

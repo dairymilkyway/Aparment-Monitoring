@@ -18,26 +18,57 @@ if (isset($_SESSION['user_id']) && $_SESSION['role'] == 'user') {
     $stmt->execute([$user_id]);
     $rented_room = $stmt->fetch(PDO::FETCH_ASSOC);
 }
+
+// Determine current page for active state
+$current_page = basename($_SERVER['PHP_SELF']);
 ?>
 
 <link rel="stylesheet" href="<?php echo $root_path; ?>css/navbar.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <nav class="navbar">
     <a href="<?php echo $root_path; ?>index.php" class="navbar-brand">
-        <span>🏠 Apartment Monitoring System</span>
+        <span><i class="fas fa-building"></i> Apartment Monitoring</span>
     </a>
+
     <div class="navbar-links">
         <?php if (isset($_SESSION['user_id'])): ?>
             <!-- Logged-in user -->
-            <span>Welcome, <?php echo htmlspecialchars($_SESSION['role']); ?>!</span>
-            <a href="<?php echo $root_path; ?>user/dashboard.php">Dashboard</a>
-            <a href="<?php echo $root_path; ?>user/request_room.php">Rent Room</a>
-            <a href="<?php echo $root_path; ?>user/maintenance_requests.php">Maintenance Requests</a>
-            <a href="<?php echo $root_path; ?>logout.php" class="logout-btn">Logout</a>
+            <span>
+                <i class="fas fa-user-circle"></i>
+                <?php echo htmlspecialchars($_SESSION['role']); ?>
+            </span>
+            
+            <a href="<?php echo $root_path; ?>user/dashboard.php" 
+               class="<?php echo ($current_page == 'dashboard.php') ? 'active' : ''; ?>">
+               <i class="fas fa-tachometer-alt"></i> Dashboard
+            </a>
+            
+            <a href="<?php echo $root_path; ?>user/request_room.php"
+               class="<?php echo ($current_page == 'request_room.php') ? 'active' : ''; ?>">
+               <i class="fas fa-key"></i> Rent Room
+            </a>
+            
+            <a href="<?php echo $root_path; ?>user/maintenance_requests.php"
+               class="<?php echo ($current_page == 'maintenance_requests.php') ? 'active' : ''; ?>">
+               <i class="fas fa-wrench"></i> Maintenance
+            </a>
+            
+            <a href="<?php echo $root_path; ?>logout.php" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
         <?php else: ?>
             <!-- Guest -->
-            <a href="<?php echo $root_path; ?>login.php">Login</a>
-            <a href="<?php echo $root_path; ?>register.php">Register</a>
+            <a href="<?php echo $root_path; ?>login.php"
+               class="<?php echo ($current_page == 'login.php') ? 'active' : ''; ?>">
+               <i class="fas fa-sign-in-alt"></i> Login
+            </a>
+            
+            <a href="<?php echo $root_path; ?>register.php"
+               class="<?php echo ($current_page == 'register.php') ? 'active' : ''; ?>">
+               <i class="fas fa-user-plus"></i> Register
+            </a>
         <?php endif; ?>
     </div>
 </nav>

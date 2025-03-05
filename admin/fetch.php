@@ -1,6 +1,24 @@
 <?php
 include "../includes/db.php";
 
+// Fetch total payments
+$query = "SELECT SUM(amount) AS total_payments FROM payments";
+$stmt = $conn->prepare($query);
+$stmt->execute();
+$total_payments = $stmt->fetch(PDO::FETCH_ASSOC)['total_payments'];
+
+// Fetch pending payments
+$query = "SELECT SUM(amount) AS pending_payments FROM payments WHERE status = 'not paid'";
+$stmt = $conn->prepare($query);
+$stmt->execute();
+$pending_payments = $stmt->fetch(PDO::FETCH_ASSOC)['pending_payments'];
+
+// Fetch paid payments
+$query = "SELECT SUM(amount) AS paid_payments FROM payments WHERE status = 'paid'";
+$stmt = $conn->prepare($query);
+$stmt->execute();
+$paid_payments = $stmt->fetch(PDO::FETCH_ASSOC)['paid_payments'];
+
 // Fetch tenant information
 $query = "SELECT t.*, rr.contact FROM tenants t LEFT JOIN room_requests rr ON t.apartment = rr.room_id";
 $stmt = $conn->prepare($query);
