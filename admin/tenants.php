@@ -6,7 +6,7 @@
                 <th>ID</th>
                 <th>Name</th>
                 <th>Room</th>
-                <th>Contact</th>
+                <th>Contact Number</th>
             </tr>
         </thead>
         <tbody>
