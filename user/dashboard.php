@@ -7,14 +7,16 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'user') {
 include "../includes/db.php";
 include "../includes/navbar.php";
 
-$rented_room_query = "SELECT r.room_number, p.date_approved, p.due_date, p.amount 
+
+$rented_room_query = "SELECT r.room_number, rr.date_approved, rr.due_date, r.price 
                        FROM rooms r 
                        JOIN payments p ON r.id = p.tenant_id 
                        JOIN room_requests rr ON r.id = rr.room_id 
                        WHERE rr.user_id = ? AND rr.status = 'approved'";
 $rented_room_stmt = $conn->prepare($rented_room_query);
 $rented_room_stmt->execute([$_SESSION['user_id']]);
-$rented_rooms = $rented_room_stmt->fetchAll(PDO::FETCH_ASSOC); // Fetch all records
+$rented_roomers = $rented_room_stmt->fetchAll(PDO::FETCH_ASSOC); // Fetch all records
+
 
 
 // Fetch pending room requests
@@ -68,7 +70,7 @@ function showRentedRoomDetails(roomIndex) {
     document.getElementById('modal-rented-room-number').textContent = rentedRoom.room_number;
     document.getElementById('modal-date-approved').textContent = rentedRoom.date_approved;
     document.getElementById('modal-due-date').textContent = rentedRoom.due_date;
-    document.getElementById('modal-amount').textContent = `₱${rentedRoom.amount}`;
+    document.getElementById('modal-amount').textContent = `₱${rentedRoom.price}`;
     document.getElementById('room-number').value = rentedRoom.room_number;
 
     document.getElementById('rented-room-details-modal').classList.add('active');
@@ -106,9 +108,10 @@ window.onload = function() {
             <?php if (count($rented_rooms) > 0): ?>
     <div class="room-grid">
         <?php foreach($rented_rooms as $index => $rented_room): ?>
+            <!-- <?php  var_dump($rented_room) ?> -->
             <div class="room-card rented" onclick="showRentedRoomDetails(<?php echo $index; ?>)">
                 <div class="room-number"><?php echo htmlspecialchars($rented_room['room_number']); ?></div>
-                <div class="room-price">₱<?php echo htmlspecialchars($rented_room['amount']); ?>/mo</div>
+                <div class="room-price">₱<?php echo htmlspecialchars($rented_room['price']); ?>/mo</div>
                 <div class="room-status">Occupied</div>
             </div>
         <?php endforeach; ?>
@@ -142,28 +145,29 @@ window.onload = function() {
         <!-- Success Modal -->
         <?php include "success_modal.php"; ?>
 
-        <!-- Rented Room Details Modal -->
-        <div id="rented-room-details-modal" class="modal-overlay">
-            <div class="modal">
-                <button type="button" class="modal-close" onclick="closeRentedRoomDetailsModal()">&times;</button>
-                <div class="modal-header">
-                    <h2 class="modal-title">Rented Room Details</h2>
-                </div>
-                <div class="modal-body">
-                    <p><strong>Room Number:</strong> <span id="modal-rented-room-number"></span></p>
-                    <p><strong>Date Approved:</strong> <span id="modal-date-approved"></span></p>
-                    <p><strong>Due Date:</strong> <span id="modal-due-date"></span></p>
-                    <p><strong>Monthly Amount:</strong> <span id="modal-amount"></span></p>
-
-                    <form method="GET" action="maintenance.php">
-                        <input type="hidden" id="room-number" name="room_number" value="">
-                        <button type="submit" class="btn-primary">
-                            <i class="fas fa-wrench"></i>&nbsp; Submit Maintenance Request
-                        </button>
-                    </form>
-                </div>
-            </div>
+  
+      <!-- Rented Room Details Modal -->
+<div id="rented-room-details-modal" class="modal-overlay">
+    <div class="modal">
+        <button type="button" class="modal-close" onclick="closeRentedRoomDetailsModal()">&times;</button>
+        <div class="modal-header">
+            <h2 class="modal-title">Rented Room Details</h2>
         </div>
+        <div class="modal-body">
+            <p><strong>Room Number:</strong> <span id="modal-rented-room-number"></span></p>
+            <p><strong>Date Approved:</strong> <span id="modal-date-approved"></span></p>
+            <p><strong>Due Date:</strong> <span id="modal-due-date"></span></p>
+            <p><strong>Monthly Amount:</strong> <span id="modal-amount"></span></p>
+
+            <form method="GET" action="maintenance.php">
+                <input type="hidden" id="room-number" name="room_number" value="">
+                <button type="submit" class="btn-primary">
+                    <i class="fas fa-wrench"></i>&nbsp; Submit Maintenance Request
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
     </div>
 </body>
 </html>

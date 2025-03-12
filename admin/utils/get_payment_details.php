@@ -5,7 +5,11 @@ if (isset($_GET['payment_id'])) {
     $payment_id = $_GET['payment_id'];
 
     // Fetch payment details
-    $query = "SELECT p.*, t.name, t.contact FROM payments p JOIN tenants t ON p.tenant_id = t.id WHERE p.id = ?";
+    $query = "SELECT p.*, t.name, t.contact, rr.date_approved, rr.due_date 
+              FROM payments p 
+              JOIN tenants t ON p.tenant_id = t.id 
+              JOIN room_requests rr ON t.apartment = rr.room_id 
+              WHERE p.id = ?";
     $stmt = $conn->prepare($query);
     $stmt->execute([$payment_id]);
     $payment = $stmt->fetch(PDO::FETCH_ASSOC);

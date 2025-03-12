@@ -26,7 +26,10 @@ $stmt->execute();
 $tenants = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Fetch rent payment information
-$query = "SELECT p.*, t.name, t.contact FROM payments p JOIN tenants t ON p.tenant_id = t.id";
+$query = "SELECT p.*, t.name, t.contact, rr.date_approved, rr.due_date 
+          FROM payments p 
+          JOIN tenants t ON p.tenant_id = t.id 
+          JOIN room_requests rr ON t.apartment = rr.room_id";
 $stmt = $conn->prepare($query);
 $stmt->execute();
 $payments = $stmt->fetchAll(PDO::FETCH_ASSOC);
