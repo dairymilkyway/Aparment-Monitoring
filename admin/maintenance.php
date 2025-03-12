@@ -39,9 +39,10 @@
                 <td>
                     <div class="action-buttons">
                         
-                        <?php if ($request['status'] != 'resolved'): ?>
+                    <?php if ($request['status'] != 'resolved'): ?>
                         <form method="post" action="utils/resolve_maintenance.php" style="display: inline;">
                             <input type="hidden" name="id" value="<?php echo htmlspecialchars($request['id']); ?>">
+                            <input type="hidden" name="date_resolved" value="<?php echo date('Y-m-d H:i:s'); ?>"> <!-- Hidden field for date_resolved -->
                             <button type="submit" class="maintenance-resolve-btn" title="Mark Resolved">
                                 <i class="fas fa-check"></i> Resolve
                             </button>

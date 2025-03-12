@@ -3,11 +3,9 @@ include "../../includes/db.php";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $id = $_POST['id'];
-    $date_resolved = date('Y-m-d H:i:s');
 
-    $query = "UPDATE maintenance_requests SET status = 'resolved', date_resolved = :date_resolved WHERE id = :id";
+    $query = "UPDATE maintenance_requests SET status = 'resolved', date_resolved = NOW() WHERE id = :id";
     $stmt = $conn->prepare($query);
-    $stmt->bindParam(':date_resolved', $date_resolved);
     $stmt->bindParam(':id', $id);
 
     if ($stmt->execute()) {

@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $stmt->execute([$room_request['room_id']]);
 
             // Insert the tenant payment
-            $query = "INSERT INTO payments (tenant_id, amount, date_approved, status) VALUES (?, ?, NOW(), 'not paid')";
+            $query = "INSERT INTO payments (tenant_id, amount,  status) VALUES (?, ?, 'not paid')";
             $stmt = $conn->prepare($query);
             $stmt->execute([$tenant_id, $room_request['price']]);
         }
