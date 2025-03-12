@@ -24,10 +24,15 @@ if ($room_request) {
     $stmt->execute([$status, $request_id]);
 
     if ($status == 'Approved') {
+        $contact = $room_request['contact'];
+
         // Insert the renter into the tenants table
         $query = "INSERT INTO tenants (name, apartment, contact) VALUES (?, ?, ?)";
         $stmt = $conn->prepare($query);
-        $stmt->execute([$room_request['name'], $room_request['room_id'], '']);
+        $stmt->execute([$room_request['name'], $room_request['room_id'], $contact]);
+
+        // Get the tenant ID
+        $tenant_id = $conn->lastInsertId();
 
         // Get the tenant ID
         $tenant_id = $conn->lastInsertId();
