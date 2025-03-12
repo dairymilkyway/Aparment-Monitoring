@@ -14,7 +14,7 @@
                 <span id="modal-tenant-name"></span>
             </p>
             <p>
-                <strong>Contact:</strong> 
+                <strong>Contact Number:</strong> 
                 <span id="modal-tenant-contact"></span>
             </p>
             <p>

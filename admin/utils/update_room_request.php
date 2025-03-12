@@ -31,10 +31,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Get the tenant ID
             $tenant_id = $conn->lastInsertId();
 
-            // Update the room status to occupied
-            $query = "UPDATE rooms SET status = 'occupied' WHERE id = ?";
+            // Update the room status to occupied and set the user_id
+            $query = "UPDATE rooms SET status = 'occupied', user_id = ? WHERE id = ?";
             $stmt = $conn->prepare($query);
-            $stmt->execute([$room_request['room_id']]);
+            $stmt->execute([$room_request['user_id'], $room_request['room_id']]);
 
             // Insert the tenant payment
             $date_approved = date('Y-m-d');
@@ -45,9 +45,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 
-    header("Location: ../dashboard.php");
-    exit();
-} else {
     header("Location: ../dashboard.php");
     exit();
 }

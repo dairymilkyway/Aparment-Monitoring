@@ -15,6 +15,7 @@
         <thead>
             <tr>
                 <th>ID</th>
+                <th>Room Number</th> <!-- New column header -->
                 <th>Description</th>
                 <th>Status</th>
                 <th>Date Requested</th>
@@ -26,6 +27,7 @@
             <?php foreach ($maintenance_requests as $request): ?>
             <tr>
                 <td><?php echo htmlspecialchars($request['id']); ?></td>
+                <td><?php echo htmlspecialchars($request['room_number']); ?></td> <!-- New column data -->
                 <td class="maintenance-description"><?php echo htmlspecialchars($request['description']); ?></td>
                 <td>
                     <span class="maintenance-status <?php echo strtolower($request['status']); ?>">
@@ -61,4 +63,3 @@
 
 <!-- Link to CSS file -->
 <link rel="stylesheet" href="./css/maintenance.css">
-

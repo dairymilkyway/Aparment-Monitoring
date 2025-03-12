@@ -11,13 +11,17 @@ if (strpos($_SERVER['PHP_SELF'], '/user/') !== false) {
 $rented_room = false;
 if (isset($_SESSION['user_id']) && $_SESSION['role'] == 'user') {
     $user_id = $_SESSION['user_id'];
-    $query = "SELECT r.room_number FROM rooms r 
-              JOIN room_requests rr ON r.id = rr.room_id 
-              WHERE rr.user_id = ? AND rr.status = 'approved'";
+    
+    $query = "SELECT r.* FROM rooms r 
+              JOIN room_requests rr ON r.id = rr.room_id
+              JOIN users u ON rr.user_id = u.id 
+              WHERE rr.user_id = ?  AND rr.status = 'approved'";
+    
     $stmt = $conn->prepare($query);
     $stmt->execute([$user_id]);
-    $rented_room = $stmt->fetch(PDO::FETCH_ASSOC);
+    $rented_rooms = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
 
 // Determine current page for active state
 $current_page = basename($_SERVER['PHP_SELF']);

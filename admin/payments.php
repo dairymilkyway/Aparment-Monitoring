@@ -1,4 +1,3 @@
-<!-- filepath: /c:/xampp/htdocs/apartment-monitoring/admin/payments.php -->
 <?php include "fetch.php"; ?>
 
 <div id="payments-section" class="section">
@@ -37,6 +36,7 @@
             <tr>
                 <th>ID</th>
                 <th>Tenant</th>
+                <th>Contact Number</th> <!-- New column header -->
                 <th>Amount</th>
                 <th>Date Approved</th>
                 <th>Due Date</th>
@@ -48,7 +48,8 @@
             <?php foreach ($payments as $payment): ?>
             <tr>
                 <td><?php echo htmlspecialchars($payment['id']); ?></td>
-                <td class="tenant-name"><?php echo htmlspecialchars($payment['tenant_id']); ?></td>
+                <td class="tenant-name"><?php echo htmlspecialchars($payment['name']); ?></td>
+                <td class="contact-number"><?php echo htmlspecialchars($payment['contact']); ?></td> <!-- New column data -->
                 <td class="payment-amount"><?php echo htmlspecialchars($payment['amount']); ?></td>
                 <td><?php echo htmlspecialchars($payment['date_approved']); ?></td>
                 <td class="payment-due <?php echo (strtotime($payment['due_date']) < time()) ? 'overdue' : ''; ?>"><?php echo htmlspecialchars($payment['due_date']); ?></td>
@@ -59,9 +60,12 @@
                 </td>
                 <td class="payment-actions">
                     <?php if ($payment['status'] == 'not paid'): ?>
-                    <button type="button" class="payment-action-btn btn-mark-paid">
-                        <i class="fas fa-check"></i> Mark Paid
-                    </button>
+                    <form method="POST" action="utils/update_payment_status.php" style="display:inline;">
+                        <input type="hidden" name="payment_id" value="<?php echo htmlspecialchars($payment['id']); ?>">
+                        <button type="submit" class="payment-action-btn btn-mark-paid">
+                            <i class="fas fa-check"></i> Mark Paid
+                        </button>
+                    </form>
                     <?php endif; ?>
                     <button type="button" class="payment-action-btn btn-view-details" onclick="showPaymentDetails(<?php echo $payment['id']; ?>)">
                         <i class="fas fa-eye"></i> View
