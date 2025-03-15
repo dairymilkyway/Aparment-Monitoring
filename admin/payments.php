@@ -80,8 +80,16 @@
 <!-- Include Payment Details Modal -->
 <?php include "utils/payment_details_modal.php"; ?>
 
-<!-- Link to CSS file -->
+<!-- Link to CSS files -->
+<link rel="stylesheet" href="../css/responsive.css">
 <link rel="stylesheet" href="./css/payments.css">
+
+<!-- Make tables responsive -->
+<script>
+    $(document).ready(function() {
+        $('table').wrap('<div class="responsive-table"></div>');
+    });
+</script>
 
 <script>
     function showPaymentDetails(paymentId) {

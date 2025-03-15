@@ -33,6 +33,7 @@ $pending_requests = array_reduce($room_requests, function($count, $request) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="../css/responsive.css">
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- DataTables JS -->
@@ -88,6 +89,7 @@ $pending_requests = array_reduce($room_requests, function($count, $request) {
     </script>
 </head>
 <body>
+    
     <div class="admin-container">
         <div class="sidebar">
             <div class="sidebar-header">
@@ -149,31 +151,7 @@ $pending_requests = array_reduce($room_requests, function($count, $request) {
         </div>
         
         <div class="content">
-            <!-- Mobile Toggle Button -->
-            <div class="mobile-toggle" onclick="toggleMobileSidebar()">
-                <i class="fas fa-bars"></i>
-            </div>
             
-            <!-- Flash Messages -->
-            <?php if (isset($_SESSION['success_message'])): ?>
-                <div class="flash-message success">
-                    <i class="fas fa-check-circle"></i>
-                    <?php 
-                        echo $_SESSION['success_message']; 
-                        unset($_SESSION['success_message']);
-                    ?>
-                </div>
-            <?php endif; ?>
-            
-            <?php if (isset($_SESSION['error_message'])): ?>
-                <div class="flash-message error">
-                    <i class="fas fa-exclamation-circle"></i>
-                    <?php 
-                        echo $_SESSION['error_message']; 
-                        unset($_SESSION['error_message']);
-                    ?>
-                </div>
-            <?php endif; ?>
             
             <!-- Dashboard Overview Section -->
             <div id="dashboard-section" class="section active">
@@ -361,11 +339,14 @@ foreach ($recent_maintenance as $request): ?>
         </div>
     </div>
     
+    <!-- Make tables responsive -->
     <script>
+        // Wrap all tables with a responsive div
         $(document).ready(function() {
-            // Handle DataTables responsiveness
-            $(window).resize(function() {
-                $('.section:not(#dashboard-section) table').DataTable().columns.adjust().responsive.recalc();
+            $('table').each(function() {
+                if (!$(this).parent().hasClass('responsive-table')) {
+                    $(this).wrap('<div class="responsive-table"></div>');
+                }
             });
         });
     </script>

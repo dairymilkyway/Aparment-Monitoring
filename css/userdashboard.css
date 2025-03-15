@@ -151,7 +151,7 @@ p {
     transform: scale(0.98) translateY(-6px);
 }
 
-.room-card.available.selected {
+room-card.available.selected {
     outline: 3px solid #2196F3;
     box-shadow: 0 0 20px rgba(33, 150, 243, 0.4);
 }
@@ -865,5 +865,219 @@ button.btn-primary:active {
     .ticket-meta {
         flex-direction: column;
         gap: 8px;
+    }
+}
+
+/* Enhanced responsive designs */
+@media (max-width: 992px) {
+    .dashboard-section {
+        padding: 20px;
+    }
+    
+    .room-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+    
+    .stats-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+    
+    .tab-container .tab {
+        padding: 10px 15px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 768px) {
+    .ticket {
+        flex-direction: column;
+    }
+    
+    .ticket-icon {
+        padding: 20px 20px 0 20px;
+    }
+    
+    .icon-wrapper {
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+    }
+    
+    .ticket-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+    
+    .ticket-meta {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .room-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .stats-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    
+    .dashboard-actions {
+        width: 100%;
+        justify-content: flex-start;
+    }
+    
+    .tab-container {
+        flex-direction: column;
+    }
+    
+    .tab-container .tab {
+        width: 100%;
+        text-align: center;
+        border-radius: 0;
+        margin: 0;
+        border-bottom: 1px solid var(--border-color);
+    }
+    
+    .tab-container .tab:first-child {
+        border-radius: 4px 4px 0 0;
+    }
+    
+    .tab-container .tab:last-child {
+        border-radius: 0 0 4px 4px;
+    }
+}
+
+@media (max-width: 576px) {
+    .dashboard-section {
+        padding: 15px;
+        margin-bottom: 15px;
+    }
+    
+    .section-header h2 {
+        font-size: 1.5rem;
+    }
+    
+    .stat-card {
+        padding: 15px;
+    }
+    
+    .stat-value {
+        font-size: 1.5rem;
+    }
+    
+    .payment-history-table th,
+    .payment-history-table td {
+        padding: 8px 5px;
+        font-size: 13px;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .action-buttons .btn {
+        width: 100%;
+        margin: 5px 0;
+    }
+}
+
+/* Responsive Dashboard Layout */
+@media (max-width: 992px) {
+    .dashboard-section {
+        padding: 15px;
+    }
+    
+    .room-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+    
+    .ticket-list {
+        grid-template-columns: 1fr;
+    }
+    
+    .payment-info {
+        flex-direction: column;
+    }
+    
+    .payment-info-item {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
+
+@media (max-width: 768px) {
+    .room-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .dashboard-quick-actions {
+        flex-direction: column;
+    }
+    
+    .quick-action-btn {
+        width: 100%;
+        margin: 5px 0;
+    }
+    
+    .section-header {
+        flex-direction: column;
+    }
+    
+    .section-header h2 {
+        margin-bottom: 10px;
+    }
+    
+    .ticket-status-indicator {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .ticket-filter-container {
+        margin-top: 15px;
+        width: 100%;
+        overflow-x: auto;
+        white-space: nowrap;
+        padding-bottom: 5px;
+    }
+}
+
+/* Form Responsiveness */
+@media (max-width: 576px) {
+    .input-group {
+        flex-direction: column;
+    }
+    
+    .input-group label {
+        margin-bottom: 5px;
+    }
+    
+    .form-row {
+        flex-direction: column;
+    }
+    
+    .form-row .input-group {
+        width: 100%;
+        margin-right: 0;
+    }
+    
+    .input-group input, 
+    .input-group select, 
+    .input-group textarea {
+        width: 100%;
+    }
+    
+    .btn-large {
+        width: 100%;
     }
 }

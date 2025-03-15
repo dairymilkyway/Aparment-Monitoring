@@ -141,3 +141,40 @@ body {
 .fas {
     margin-right: 6px;
 }
+
+/* Responsive Register Form */
+@media (max-width: 768px) {
+    .register-container {
+        padding: 20px;
+    }
+    
+    .register-card {
+        width: 100%;
+        max-width: none;
+        padding: 20px;
+    }
+    
+    .register-header h1 {
+        font-size: 1.8rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .register-container {
+        padding: 15px;
+    }
+    
+    .register-card {
+        padding: 15px;
+    }
+    
+    .input-group {
+        margin-bottom: 15px;
+    }
+    
+    .register-footer {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+}

@@ -551,3 +551,215 @@
   .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
     background: var(--gray-light);
   }
+
+  /* Enhanced Responsive Styles */
+  @media screen and (max-width: 1200px) {
+    .admin-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+    }
+  }
+
+  @media screen and (max-width: 992px) {
+    .admin-container {
+        display: block;
+    }
+    
+    .sidebar {
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: -100%;
+        height: 100%;
+        z-index: 1000;
+        transition: left 0.3s ease;
+    }
+    
+    .sidebar.active {
+        left: 0;
+    }
+    
+    .main-content {
+        margin-left: 0;
+        width: 100%;
+    }
+    
+    .mobile-toggle {
+        display: block;
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        z-index: 1001;
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    
+    .admin-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .section-header .btn-group {
+        width: 100%;
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    .admin-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .admin-card {
+        padding: 15px;
+    }
+    
+    .admin-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .dataTables_wrapper .dataTables_filter input {
+        width: 100px;
+    }
+    
+    .dataTables_wrapper .dataTables_length select {
+        width: 60px;
+    }
+  }
+
+  @media screen and (max-width: 576px) {
+    .admin-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+    
+    .admin-header h1 {
+        font-size: 1.6rem;
+    }
+    
+    .card-body {
+        padding: 12px;
+    }
+    
+    .dashboard-widget {
+        margin-bottom: 15px;
+    }
+    
+    .dashboard-widget-header {
+        padding: 10px;
+    }
+    
+    .dataTables_wrapper .dataTables_info,
+    .dataTables_wrapper .dataTables_paginate {
+        float: none;
+        text-align: center;
+        margin-top: 8px;
+    }
+    
+    .dataTables_wrapper .dataTables_length,
+    .dataTables_wrapper .dataTables_filter {
+        float: none;
+        text-align: center;
+        margin-bottom: 8px;
+    }
+  }
+
+  /* Responsive Admin Layout */
+  @media (max-width: 992px) {
+    .dashboard-content {
+        margin-left: 0;
+    }
+    
+    .sidebar {
+        position: fixed;
+        left: -250px;
+        transition: all 0.3s;
+        z-index: 1000;
+    }
+    
+    .sidebar.active {
+        left: 0;
+    }
+    
+    .mobile-sidebar-toggle {
+        display: block;
+        position: fixed;
+        top: 15px;
+        left: 15px;
+        background: #0056b3;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 8px 12px;
+        z-index: 1001;
+        cursor: pointer;
+    }
+    
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .chart-container {
+        flex-direction: column;
+    }
+    
+    .chart {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .admin-page-title {
+        text-align: center;
+        margin-top: 50px;
+    }
+    
+    .actions-toolbar {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .actions-toolbar .search-box {
+        width: 100%;
+    }
+    
+    .actions-toolbar .btn {
+        width: 100%;
+    }
+  }
+
+  /* Responsive Tables for Admin */
+  @media (max-width: 992px) {
+    .responsive-table {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .action-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .action-buttons button,
+    .action-buttons form button {
+        width: 100%;
+        margin: 2px 0;
+    }
+  }
