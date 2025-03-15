@@ -12,6 +12,7 @@
             <tr>
                 <th>ID</th>
                 <th>Room Number</th>
+                <th>Description</th>
                 <th>Status</th>
                 <th>Price</th>
                 <th>Actions</th>
@@ -22,6 +23,7 @@
             <tr>
                 <td><?php echo htmlspecialchars($room['id']); ?></td>
                 <td><?php echo htmlspecialchars($room['room_number']); ?></td>
+                <td><?php echo htmlspecialchars($room['description']); ?></td>
                 <td><?php echo htmlspecialchars($room['status']); ?></td>
                 <td>₱<?php echo htmlspecialchars($room['price']); ?></td>
                 <td>

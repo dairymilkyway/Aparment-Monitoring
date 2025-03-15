@@ -10,8 +10,8 @@
                     <div class="room-number" id="preview-room-number"></div>
                 </div>
                 <div class="room-preview-info">
-                    <div class="room-preview-number">Room <span id="preview-room-number-text"></span></div>
                     <div class="room-preview-status">Available</div>
+                    <div class="room-preview-description"><span id="room-description"></span></div>
                     <div class="room-preview-price">Price: ₱<span id="room-price"></span></div>
                 </div>
             </div>

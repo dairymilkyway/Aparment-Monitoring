@@ -64,16 +64,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link rel="stylesheet" href="../css/userdashboard.css">
     <link rel="stylesheet" href="../css/modal.css">
     <script>
-        function selectRoom(roomId, roomNumber, roomPrice) {
-            // Open the modal
-            document.getElementById('room-request-modal').classList.add('active');
-            
-            // Update the room information in the modal
-            document.getElementById('selected-room-id').value = roomId;
-            document.getElementById('modal-room-number').textContent = roomNumber;
-            document.getElementById('preview-room-number').textContent = roomNumber;
-            document.getElementById('room-price').textContent = roomPrice;
-        }
+         function selectRoom(roomId, roomNumber, roomPrice, roomDescription) {
+        // Open the modal
+        document.getElementById('room-request-modal').classList.add('active');
+        
+        // Update the room information in the modal
+        document.getElementById('selected-room-id').value = roomId;
+        document.getElementById('modal-room-number').textContent = roomNumber;
+        document.getElementById('preview-room-number').textContent = roomNumber;
+        document.getElementById('room-price').textContent = roomPrice;
+        document.getElementById('room-description').textContent = roomDescription;
+    }
         
         function closeModal() {
             document.getElementById('room-request-modal').classList.remove('active');
@@ -115,7 +116,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <div id="room-<?php echo $room['id']; ?>" 
                      class="room-card <?php echo $room['status'] == 'available' ? 'available' : ($room['status'] == 'pending' ? 'pending' : 'occupied'); ?>"
                      <?php if ($room['status'] == 'available'): ?>
-                     onclick="selectRoom(<?php echo $room['id']; ?>, '<?php echo htmlspecialchars($room['room_number']); ?>', '<?php echo htmlspecialchars($room['price']); ?>')"
+                     onclick="selectRoom(<?php echo $room['id']; ?>, '<?php echo htmlspecialchars($room['room_number']); ?>', '<?php echo htmlspecialchars($room['price']); ?>', '<?php echo htmlspecialchars($room['description']); ?>')"
                      <?php endif; ?>>
                     <div class="room-number"><?php echo htmlspecialchars($room['room_number']); ?></div>
                     <?php if (isset($room['price']) && $room['price'] > 0): ?>
