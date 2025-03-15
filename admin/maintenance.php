@@ -26,7 +26,7 @@
         <tbody>
             <?php foreach ($maintenance_requests as $request): ?>
             <tr>
-                <td><?php echo htmlspecialchars($request['id']); ?></td>
+            <td><?php echo htmlspecialchars($request['id']); ?></td>
                 <td><?php echo htmlspecialchars($request['room_number']); ?></td> <!-- New column data -->
                 <td class="maintenance-description"><?php echo htmlspecialchars($request['description']); ?></td>
                 <td>
@@ -35,7 +35,7 @@
                     </span>
                 </td>
                 <td><?php echo isset($request['created_at']) ? htmlspecialchars($request['created_at']) : '—'; ?></td>
-                <td><?php echo htmlspecialchars($request['date_resolved'] ?: '—'); ?></td>
+                <td><?php echo htmlspecialchars($request['date_resolved'] ?: '—'); ?></td> <!-- Display date_resolved -->
                 <td>
                     <div class="action-buttons">
                         

@@ -15,21 +15,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $description = $_POST['description'];
         $reason = $_POST['reason'];
         $room_number = $_POST['room_number'];
-        $query = "INSERT INTO maintenance_requests (tenant_id, description, reason, room_number, status, created_at) VALUES (?, ?, ?, ?, 'Pending', NOW())";
+        $tenant_id = $_SESSION['user_id'];
+
+        // Check if tenant ID exists
+        $query = "SELECT id FROM tenants WHERE id = ?";
         $stmt = $conn->prepare($query);
-        $stmt->execute([$_SESSION['user_id'], $description, $reason, $room_number]);
-        
-        // Store success data for modal
-        $success_data = [
-            'type' => 'maintenance',
-            'description' => substr($description, 0, 100) . (strlen($description) > 100 ? '...' : ''),
-            'reason' => $reason,
-            'room_number' => $room_number
-        ];
+        $stmt->execute([$tenant_id]);
+        $tenant = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($tenant) {
+            $query = "INSERT INTO maintenance_requests (tenant_id, description, reason, room_number, status, created_at, date_resolved) VALUES (?, ?, ?, ?, 'Pending', NOW(), NULL)";
+            $stmt = $conn->prepare($query);
+            $stmt->execute([$tenant_id, $description, $reason, $room_number]);
+
+            // Store success data for modal
+            $success_data = [
+                'type' => 'maintenance',
+                'description' => substr($description, 0, 100) . (strlen($description) > 100 ? '...' : ''),
+                'reason' => $reason,
+                'room_number' => $room_number
+            ];
+        } else {
+            echo "Invalid tenant ID.";
+        }
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -71,37 +82,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
             
             <div class="input-group" style="--animation-order: 2">
-    <label>Issue Type</label>
-    <div class="issue-type-buttons">
-        <input type="hidden" name="reason" id="reason-input" value="" required>
-        
-        <button type="button" class="issue-button" data-value="Plumbing Issue">
-            <i class="fa-solid fa-faucet"></i>
-            <span>Plumbing</span>
-        </button>
-        
-        <button type="button" class="issue-button" data-value="Electrical Issue">
-            <i class="fa-solid fa-bolt"></i>
-            <span>Electrical</span>
-        </button>
-        
-        <button type="button" class="issue-button" data-value="Heating Issue">
-            <i class="fa-solid fa-temperature-high"></i>
-            <span>Heating</span>
-        </button>
-        
-        <button type="button" class="issue-button" data-value="Appliance Issue">
-            <i class="fa-solid fa-tv"></i>
-            <span>Appliance</span>
-        </button>
-        
-        <button type="button" class="issue-button" data-value="Other">
-            <i class="fa-solid fa-question-circle"></i>
-            <span>Other</span>
-        </button>
-    </div>
-    <div class="error-message" id="reason-error" style="display: none;">Please select an issue type</div>
-</div>
+                <label>Issue Type</label>
+                <div class="issue-type-buttons">
+                    <input type="hidden" name="reason" id="reason-input" value="" required>
+                    
+                    <button type="button" class="issue-button" data-value="Plumbing Issue">
+                        <i class="fa-solid fa-faucet"></i>
+                        <span>Plumbing</span>
+                    </button>
+                    <button type="button" class="issue-button" data-value="Electrical Issue">
+                        <i class="fa-solid fa-bolt"></i>
+                        <span>Electrical</span>
+                    </button>
+                    <button type="button" class="issue-button" data-value="Heating Issue">
+                        <i class="fa-solid fa-temperature-high"></i>
+                        <span>Heating</span>
+                    </button>
+                    <button type="button" class="issue-button" data-value="Appliance Issue">
+                        <i class="fa-solid fa-tv"></i>
+                        <span>Appliance</span>
+                    </button>
+                    <button type="button" class="issue-button" data-value="Other">
+                        <i class="fa-solid fa-question-circle"></i>
+                        <span>Other</span>
+                    </button>
+                </div>
+                <div class="error-message" id="reason-error" style="display: none;">Please select an issue type</div>
+            </div>
             
             <div class="input-group" style="--animation-order: 3">
                 <label for="description">Description of the Issue</label>
@@ -131,7 +138,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
 </body>
 </html>
-
 
 <script>
     // Add this to your existing JavaScript
