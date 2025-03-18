@@ -117,6 +117,12 @@ $pending_requests = array_reduce($room_requests, function($count, $request) {
                     </a>
                 </li>
                 <li>
+                    <a href="#" class="sidebar-link" data-section="payment-history-section" onclick="showSection('payment-history-section')">
+                        <i class="fas fa-list"></i>
+                        <span>Payment History</span>
+                    </a>
+                </li>
+                <li>
                     <a href="#" class="sidebar-link" data-section="maintenance-section" onclick="showSection('maintenance-section')">
                         <i class="fas fa-tools"></i>
                         <span>Maintenance</span>
@@ -324,6 +330,8 @@ foreach ($recent_maintenance as $request): ?>
             
             <!-- Include Payments Section -->
             <?php include "payments.php"; ?>
+
+            <?php include "payment_history.php"; ?>
             
             <!-- Include Maintenance Section -->
             <?php include "maintenance.php"; ?>

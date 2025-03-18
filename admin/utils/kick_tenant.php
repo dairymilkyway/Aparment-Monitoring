@@ -39,6 +39,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt = $conn->prepare($query);
         $stmt->execute([$room_id]);
 
+$query = "UPDATE payment_history SET move_out_date = NOW() WHERE tenant_id = ?";
+$stmt = $conn->prepare($query);
+$stmt->execute([$tenant_id]);
+
+
         // Commit transaction
         $conn->commit();
 

@@ -49,6 +49,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt = $conn->prepare($query);
         $stmt->execute([$currentPayment['tenant_id'], $currentPayment['amount']]);
 
+        $query = "INSERT INTO payment_history (tenant_id, tenant_name, amount_paid, date_of_payment) 
+          VALUES (?, ?, ?, NOW())";
+$stmt = $conn->prepare($query);
+$stmt->execute([$currentPayment['tenant_id'], $currentPayment['name'], $currentPayment['amount']]);
+
         // Commit the transaction
         $conn->commit();
         

@@ -140,24 +140,64 @@ body {
     .login-header h1 {
         font-size: 1.8rem;
     }
+    
+    .login-btn {
+        padding: 14px; /* Larger touch target */
+    }
 }
 
 @media (max-width: 576px) {
     .login-container {
-        padding: 15px;
+        padding: 15px 10px;
     }
     
     .login-card {
-        padding: 15px;
+        padding: 20px 15px;
+        margin: 10px;
     }
     
     .input-group {
         margin-bottom: 15px;
     }
     
+    .input-group label {
+        font-size: 13px;
+        margin-bottom: 6px;
+    }
+    
+    .input-group input {
+        padding: 10px;
+        font-size: 15px;
+    }
+    
     .login-links {
         flex-direction: column;
         gap: 10px;
         align-items: center;
+        margin-top: 20px;
+    }
+    
+    .login-links a {
+        text-align: center;
+        width: 100%;
+    }
+    
+    .login-header h1 {
+        font-size: 1.6rem;
+    }
+    
+    .login-header p {
+        font-size: 0.95rem;
+    }
+}
+
+/* Touch-friendly inputs for mobile */
+@media (max-width: 768px) {
+    .input-group input {
+        min-height: 44px; /* Better tap targets */
+    }
+    
+    .login-btn {
+        min-height: 48px;
     }
 }
