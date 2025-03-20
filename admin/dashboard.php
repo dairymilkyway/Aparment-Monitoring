@@ -331,7 +331,6 @@ foreach ($recent_maintenance as $request): ?>
             <!-- Include Payments Section -->
             <?php include "payments.php"; ?>
 
-            <?php include "payment_history.php"; ?>
             
             <!-- Include Maintenance Section -->
             <?php include "maintenance.php"; ?>
@@ -344,6 +343,8 @@ foreach ($recent_maintenance as $request): ?>
             
             <!-- Include Room Requests Section -->
             <?php include "room_requests.php"; ?>
+
+            <?php include "payment_history.php"; ?>
         </div>
     </div>
     
