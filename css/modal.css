@@ -477,3 +477,37 @@
         font-size: 0.9rem;
     }
 }
+#move-out-modal .modal-body {
+    text-align: center;
+    padding: 20px;
+}
+
+#move-out-modal .btn-danger {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#move-out-modal .btn-secondary {
+    background-color: #ddd;
+    color: #444;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.btn-danger {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+}

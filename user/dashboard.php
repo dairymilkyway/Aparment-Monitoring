@@ -7,17 +7,15 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'user') {
 include "../includes/db.php";
 include "../includes/navbar.php";
 
-
-$rented_room_query = "SELECT r.room_number, rr.date_approved, rr.due_date, r.price 
+// Fetch rented rooms
+$rented_room_query = "SELECT r.room_number, rr.date_approved, rr.due_date, r.price, r.id 
                        FROM rooms r 
                        JOIN payments p ON r.id = p.tenant_id 
                        JOIN room_requests rr ON r.id = rr.room_id 
                        WHERE rr.user_id = ? AND rr.status = 'approved'";
 $rented_room_stmt = $conn->prepare($rented_room_query);
 $rented_room_stmt->execute([$_SESSION['user_id']]);
-$rented_roomers = $rented_room_stmt->fetchAll(PDO::FETCH_ASSOC); // Fetch all records
-
-
+$rented_rooms = $rented_room_stmt->fetchAll(PDO::FETCH_ASSOC); // Fetch all records
 
 // Fetch pending room requests
 $pending_requests_query = "SELECT rr.*, r.room_number, r.price 
@@ -30,24 +28,74 @@ $pending_requests = $pending_requests_stmt->fetchAll(PDO::FETCH_ASSOC);
 
 $success_data = null;
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if (isset($_POST['description'])) {
-        // Handle maintenance request
-        $description = $_POST['description'];
-        $reason = $_POST['reason'];
-        $room_number = $_POST['room_number'];
-        $query = "INSERT INTO maintenance_requests (tenant_id, description, reason, status) VALUES (?, ?, ?, 'Pending')";
-        $stmt = $conn->prepare($query);
-        $stmt->execute([$_SESSION['user_id'], $description, $reason]);
+// Handle maintenance request
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['description'])) {
+    $description = $_POST['description'];
+    $reason = $_POST['reason'];
+    $room_number = $_POST['room_number'];
+    $query = "INSERT INTO maintenance_requests (tenant_id, description, reason, status) VALUES (?, ?, ?, 'Pending')";
+    $stmt = $conn->prepare($query);
+    $stmt->execute([$_SESSION['user_id'], $description, $reason]);
 
-        // Store success data for modal
-        $success_data = [
-            'type' => 'maintenance',
-            'description' => substr($description, 0, 100) . (strlen($description) > 100 ? '...' : ''),
-            'reason' => $reason,
-            'room_number' => $room_number
-        ];
+    $success_data = [
+        'type' => 'maintenance',
+        'description' => substr($description, 0, 100) . (strlen($description) > 100 ? '...' : ''),
+        'reason' => $reason,
+        'room_number' => $room_number
+    ];
+}
+
+// ✅ Handle move-out request
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['room_id']) && !empty($_POST['room_id'])) {
+    $room_id = $_POST['room_id'];
+
+    try {
+        // ✅ 1. Find the tenant_id based on the room_id
+        $query = "SELECT id FROM tenants WHERE apartment = ? AND deleted_at IS NULL LIMIT 1";
+        $stmt = $conn->prepare($query);
+        $stmt->execute([$room_id]);
+        $tenant = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($tenant) {
+            $tenant_id = $tenant['id'];
+
+            // ✅ 2. Soft delete tenant by updating deleted_at
+            $query = "UPDATE tenants SET deleted_at = NOW() WHERE id = ?";
+            $stmt = $conn->prepare($query);
+            $stmt->execute([$tenant_id]);
+
+            // ✅ 3. Mark room as available
+            $query = "UPDATE rooms SET status = 'available' WHERE id = ?";
+            $stmt = $conn->prepare($query);
+            $stmt->execute([$room_id]);
+
+            // ✅ 4. Update room request status to 'moved out'
+            $query = "UPDATE room_requests SET status = 'moved out' WHERE room_id = ?";
+            $stmt = $conn->prepare($query);
+            $stmt->execute([$room_id]);
+
+            // ✅ 5. Record move-out date in payment history
+            $query = "UPDATE payment_history 
+                      SET move_out_date = NOW() 
+                      WHERE tenant_id = ?";
+            $stmt = $conn->prepare($query);
+            $stmt->execute([$tenant_id]);
+
+            $success_data = [
+                'type' => 'moveout',
+                'room_number' => $room_id
+            ];
+        } else {
+            $success_data = [
+                'type' => 'error',
+                'message' => 'Error: No tenant found for this room.'
+            ];
+        }
+    } catch (PDOException $e) {
+        die("Error: " . $e->getMessage());
     }
+    header("Location: ./dashboard.php");
+    exit();
 }
 ?>
 
@@ -72,17 +120,19 @@ function showRentedRoomDetails(roomIndex) {
     document.getElementById('modal-date-approved').textContent = rentedRoom.date_approved;
     document.getElementById('modal-due-date').textContent = rentedRoom.due_date;
     document.getElementById('modal-amount').textContent = `₱${rentedRoom.price}`;
+
+    // Pass room_id for move-out logic
     document.getElementById('room-number').value = rentedRoom.room_number;
+    document.getElementById('room-id').value = rentedRoom.id;
 
     document.getElementById('rented-room-details-modal').classList.add('active');
 }
-
 
 function closeRentedRoomDetailsModal() {
     document.getElementById('rented-room-details-modal').classList.remove('active');
 }
 
-window.onclick = function(event) {
+window.onclick = function (event) {
     const rentedRoomModal = document.getElementById('rented-room-details-modal');
     const successModal = document.getElementById('success-modal');
 
@@ -90,9 +140,13 @@ window.onclick = function(event) {
     if (event.target === successModal) closeSuccessModal();
 };
 
-window.onload = function() {
+window.onload = function () {
     <?php if ($success_data): ?>
-        document.getElementById('success-modal').classList.add('active');
+    if ("<?php echo $success_data['type']; ?>" === "moveout") {
+        alert("✅ Room <?php echo $success_data['room_number']; ?> moved out successfully.");
+    } else if ("<?php echo $success_data['type']; ?>" === "error") {
+        alert("❌ <?php echo $success_data['message']; ?>");
+    }
     <?php endif; ?>
 };
 </script>
@@ -107,20 +161,18 @@ window.onload = function() {
                 <h2><i class="fas fa-home"></i> Your Rented Room</h2>
             </div>
             <?php if (count($rented_rooms) > 0): ?>
-    <div class="room-grid">
-        <?php foreach($rented_rooms as $index => $rented_room): ?>
-            <!-- <?php  var_dump($rented_room) ?> -->
-            <div class="room-card rented" onclick="showRentedRoomDetails(<?php echo $index; ?>)">
-                <div class="room-number"><?php echo htmlspecialchars($rented_room['room_number']); ?></div>
-                <div class="room-price">₱<?php echo htmlspecialchars($rented_room['price']); ?>/mo</div>
-                <div class="room-status">Occupied</div>
-            </div>
-        <?php endforeach; ?>
-    </div>
-<?php else: ?>
-    <p>You haven't rented any rooms yet.</p>
-<?php endif; ?>
-
+                <div class="room-grid">
+                    <?php foreach ($rented_rooms as $index => $rented_room): ?>
+                        <div class="room-card rented" onclick="showRentedRoomDetails(<?php echo $index; ?>)">
+                            <div class="room-number"><?php echo htmlspecialchars($rented_room['room_number']); ?></div>
+                            <div class="room-price">₱<?php echo htmlspecialchars($rented_room['price']); ?>/mo</div>
+                            <div class="room-status">Occupied</div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php else: ?>
+                <p>You haven't rented any rooms yet.</p>
+            <?php endif; ?>
         </section>
 
         <!-- Pending Requests Section -->
@@ -146,29 +198,39 @@ window.onload = function() {
         <!-- Success Modal -->
         <?php include "success_modal.php"; ?>
 
-  
-      <!-- Rented Room Details Modal -->
-<div id="rented-room-details-modal" class="modal-overlay">
-    <div class="modal">
-        <button type="button" class="modal-close" onclick="closeRentedRoomDetailsModal()">&times;</button>
-        <div class="modal-header">
-            <h2 class="modal-title">Rented Room Details</h2>
-        </div>
-        <div class="modal-body">
-            <p><strong>Room Number:</strong> <span id="modal-rented-room-number"></span></p>
-            <p><strong>Date Approved:</strong> <span id="modal-date-approved"></span></p>
-            <p><strong>Due Date:</strong> <span id="modal-due-date"></span></p>
-            <p><strong>Monthly Amount:</strong> <span id="modal-amount"></span></p>
+        <!-- Rented Room Details Modal -->
+        <div id="rented-room-details-modal" class="modal-overlay">
+            <div class="modal">
+                <button type="button" class="modal-close" onclick="closeRentedRoomDetailsModal()">&times;</button>
+                <div class="modal-header">
+                    <h2 class="modal-title">Rented Room Details</h2>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Room Number:</strong> <span id="modal-rented-room-number"></span></p>
+                    <p><strong>Date Approved:</strong> <span id="modal-date-approved"></span></p>
+                    <p><strong>Due Date:</strong> <span id="modal-due-date"></span></p>
+                    <p><strong>Monthly Amount:</strong> <span id="modal-amount"></span></p>
 
-            <form method="GET" action="maintenance.php">
-                <input type="hidden" id="room-number" name="room_number" value="">
-                <button type="submit" class="btn-primary">
-                    <i class="fas fa-wrench"></i>&nbsp; Submit Maintenance Request
-                </button>
-            </form>
+                    <!-- Maintenance Request Form -->
+                    <form method="GET" action="maintenance.php">
+                        <input type="hidden" id="room-number" name="room_number" value="">
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-wrench"></i>&nbsp; Submit Maintenance Request
+                        </button>
+                    </form>
+
+                    <!-- Move Out Button Form -->
+                    <center>
+                        <form method="POST">
+                            <input type="hidden" id="room-id" name="room_id" value="">
+                            <button type="submit" class="btn-danger mt-3">
+                                <i class="fas fa-sign-out-alt"></i>&nbsp; Move Out
+                            </button>
+                        </form>
+                    </center>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
     </div>
 </body>
 </html>

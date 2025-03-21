@@ -8,7 +8,10 @@ include "../includes/db.php";
 include "../includes/navbar.php";
 
 // Fetch maintenance requests for the logged-in user
-$query = "SELECT * FROM maintenance_requests WHERE tenant_id = ? ORDER BY created_at DESC";
+$query = "SELECT mr.*, mr.room_number 
+          FROM maintenance_requests mr
+          WHERE mr.tenant_id IN (SELECT id FROM tenants WHERE user_id = ?)
+          ORDER BY mr.created_at DESC";
 $stmt = $conn->prepare($query);
 $stmt->execute([$_SESSION['user_id']]);
 $maintenance_requests = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -21,9 +24,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $description = $_POST['description'];
         $reason = $_POST['reason'];
         $room_number = $_POST['room_number'];
-        $query = "INSERT INTO maintenance_requests (tenant_id, description, reason, status) VALUES (?, ?, ?, 'Pending')";
+        
+        $query = "INSERT INTO maintenance_requests (tenant_id, description, reason, status, room_number) VALUES (?, ?, ?, 'Pending', ?)";
         $stmt = $conn->prepare($query);
-        $stmt->execute([$_SESSION['user_id'], $description, $reason]);
+        $stmt->execute([$_SESSION['user_id'], $description, $reason, $room_number]);
         
         // Store success data for modal
         $success_data = [
@@ -148,6 +152,9 @@ function getReasonIcon($reason) {
                             
                             <div class="ticket-summary">
                                 <?php echo htmlspecialchars(substr($request['description'], 0, 90) . (strlen($request['description']) > 90 ? '...' : '')); ?>
+                            </div>
+                            <div class="ticket-room-number">
+                                <strong>Room:</strong> <?php echo htmlspecialchars($request['room_number']); ?>
                             </div>
                             
                             <div class="ticket-footer">

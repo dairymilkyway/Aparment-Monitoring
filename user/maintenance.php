@@ -11,20 +11,24 @@ $success_data = null;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['description'])) {
-        // Handle maintenance request
         $description = $_POST['description'];
         $reason = $_POST['reason'];
         $room_number = $_POST['room_number'];
-        $tenant_id = $_SESSION['user_id'];
+        $user_id = $_SESSION['user_id'];
 
-        // Check if tenant ID exists
-        $query = "SELECT id FROM tenants WHERE id = ?";
+
+        // Validate if the user is a tenant
+        $query = "SELECT id FROM tenants WHERE user_id = ? AND deleted_at IS NULL LIMIT 1";
         $stmt = $conn->prepare($query);
-        $stmt->execute([$tenant_id]);
+        $stmt->execute([$user_id]);
         $tenant = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($tenant) {
-            $query = "INSERT INTO maintenance_requests (tenant_id, description, reason, room_number, status, created_at, date_resolved) VALUES (?, ?, ?, ?, 'Pending', NOW(), NULL)";
+            $tenant_id = $tenant['id'];
+
+            // Insert the maintenance request
+            $query = "INSERT INTO maintenance_requests (tenant_id, description, reason, room_number, status, created_at) 
+                      VALUES (?, ?, ?, ?, 'Pending', NOW())";
             $stmt = $conn->prepare($query);
             $stmt->execute([$tenant_id, $description, $reason, $room_number]);
 
@@ -36,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 'room_number' => $room_number
             ];
         } else {
-            echo "Invalid tenant ID.";
+            $_SESSION['error_message'] = "Invalid tenant ID.";
         }
     }
 }
