@@ -1,3 +1,16 @@
+<?php
+include "../includes/db.php";
+
+// Fetch all tenants, ensuring no duplicates
+$query = "SELECT DISTINCT t.id, t.name, t.apartment, t.contact, t.deleted_at 
+          FROM tenants t 
+          LEFT JOIN payments p ON t.id = p.tenant_id 
+          ORDER BY t.deleted_at DESC, t.name ASC";
+$stmt = $conn->prepare($query);
+$stmt->execute();
+$tenants = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
+
 <div id="tenants-section" class="section">
     <div class="content-header">
         <h2 class="content-title">
