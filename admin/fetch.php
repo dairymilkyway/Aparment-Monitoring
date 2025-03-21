@@ -20,7 +20,8 @@ $stmt->execute();
 $paid_payments = $stmt->fetch(PDO::FETCH_ASSOC)['paid_payments'];
 
 // Fetch tenant information
-$query = "SELECT t.*, rr.contact FROM tenants t LEFT JOIN room_requests rr ON t.apartment = rr.room_id";
+$query = "SELECT t.*, rr.contact, t.deleted_at FROM tenants t 
+          LEFT JOIN room_requests rr ON t.apartment = rr.room_id";
 $stmt = $conn->prepare($query);
 $stmt->execute();
 $tenants = $stmt->fetchAll(PDO::FETCH_ASSOC);

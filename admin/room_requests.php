@@ -39,58 +39,60 @@
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($room_requests as $request): ?>
-                <tr>
-                    <td><?php echo htmlspecialchars($request['id']); ?></td>
-                    <td>
-                        <div class="room-request-user">
-                            <div class="room-request-user-avatar">
-                                <?php echo strtoupper(substr(htmlspecialchars($request['name']), 0, 1)); ?>
-                            </div>
-                            <div>
-                                <div><?php echo htmlspecialchars($request['name']); ?></div>
-                                <small>ID: <?php echo htmlspecialchars($request['user_id']); ?></small>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="room-request-room"><?php echo htmlspecialchars($request['room_id']); ?></td>
-                    <td><?php echo htmlspecialchars($request['pax']); ?></td>
-                    <td><?php echo htmlspecialchars($request['mode_of_payment']); ?></td>
-                    <td>
-                        <?php 
-                        $statusClass = '';
-                        switch(strtolower($request['status'])) {
-                            case 'approved':
-                                $statusClass = 'approved';
-                                break;
-                            case 'rejected':
-                                $statusClass = 'rejected';
-                                break;
-                            default:
-                                $statusClass = 'pending';
-                        }
-                        ?>
-                        <span class="room-request-status <?php echo $statusClass; ?>">
-                            <?php echo htmlspecialchars($request['status']); ?>
-                        </span>
-                    </td>
-                    <td class="room-request-actions">
-                        <?php if ($request['status'] != 'approved' && $request['status'] != 'rejected'): ?>
-                            <form method="POST" action="utils/update_room_request.php" style="display:inline;">
-                                <input type="hidden" name="request_id" value="<?php echo $request['id']; ?>">
-                                <input type="hidden" name="status" value="Approved">
-                                <button type="submit" class="room-request-btn approve">Approve</button>
-                            </form>
-                            <form method="POST" action="utils/update_room_request.php" style="display:inline;">
-                                <input type="hidden" name="request_id" value="<?php echo $request['id']; ?>">
-                                <input type="hidden" name="status" value="Rejected">
-                                <button type="submit" class="room-request-btn reject">Reject</button>
-                            </form>
-                        <?php endif; ?>
-                    </td>
-                </tr>
-                <?php endforeach; ?>
-            </tbody>
+    <?php foreach ($room_requests as $request): ?>
+        <?php if (strtolower($request['status']) == 'moved out') continue; // Skip 'moved out' rows ?>
+        <tr>
+            <td><?php echo htmlspecialchars($request['id']); ?></td>
+            <td>
+                <div class="room-request-user">
+                    <div class="room-request-user-avatar">
+                        <?php echo strtoupper(substr(htmlspecialchars($request['name']), 0, 1)); ?>
+                    </div>
+                    <div>
+                        <div><?php echo htmlspecialchars($request['name']); ?></div>
+                        <small>ID: <?php echo htmlspecialchars($request['user_id']); ?></small>
+                    </div>
+                </div>
+            </td>
+            <td class="room-request-room"><?php echo htmlspecialchars($request['room_id']); ?></td>
+            <td><?php echo htmlspecialchars($request['pax']); ?></td>
+            <td><?php echo htmlspecialchars($request['mode_of_payment']); ?></td>
+            <td>
+                <?php 
+                $statusClass = '';
+                switch(strtolower($request['status'])) {
+                    case 'approved':
+                        $statusClass = 'approved';
+                        break;
+                    case 'rejected':
+                        $statusClass = 'rejected';
+                        break;
+                    default:
+                        $statusClass = 'pending';
+                }
+                ?>
+                <span class="room-request-status <?php echo $statusClass; ?>">
+                    <?php echo htmlspecialchars($request['status']); ?>
+                </span>
+            </td>
+            <td class="room-request-actions">
+                <?php if ($request['status'] != 'approved' && $request['status'] != 'rejected'): ?>
+                    <form method="POST" action="utils/update_room_request.php" style="display:inline;">
+                        <input type="hidden" name="request_id" value="<?php echo $request['id']; ?>">
+                        <input type="hidden" name="status" value="Approved">
+                        <button type="submit" class="room-request-btn approve">Approve</button>
+                    </form>
+                    <form method="POST" action="utils/update_room_request.php" style="display:inline;">
+                        <input type="hidden" name="request_id" value="<?php echo $request['id']; ?>">
+                        <input type="hidden" name="status" value="Rejected">
+                        <button type="submit" class="room-request-btn reject">Reject</button>
+                    </form>
+                <?php endif; ?>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+</tbody>
+
         </table>
     </div>
 

@@ -55,32 +55,47 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['room_id']) && !empty($
         $stmt = $conn->prepare($query);
         $stmt->execute([$room_id]);
         $tenant = $stmt->fetch(PDO::FETCH_ASSOC);
-
+    
         if ($tenant) {
             $tenant_id = $tenant['id'];
-
+    
             // ✅ 2. Soft delete tenant by updating deleted_at
             $query = "UPDATE tenants SET deleted_at = NOW() WHERE id = ?";
             $stmt = $conn->prepare($query);
             $stmt->execute([$tenant_id]);
-
+    
             // ✅ 3. Mark room as available
             $query = "UPDATE rooms SET status = 'available' WHERE id = ?";
             $stmt = $conn->prepare($query);
             $stmt->execute([$room_id]);
-
+    
             // ✅ 4. Update room request status to 'moved out'
             $query = "UPDATE room_requests SET status = 'moved out' WHERE room_id = ?";
             $stmt = $conn->prepare($query);
             $stmt->execute([$room_id]);
-
+    
             // ✅ 5. Record move-out date in payment history
             $query = "UPDATE payment_history 
                       SET move_out_date = NOW() 
                       WHERE tenant_id = ?";
             $stmt = $conn->prepare($query);
             $stmt->execute([$tenant_id]);
-
+    
+            // ✅ 6. Mark payments as finalized
+            $query = "UPDATE payments SET status = 'finalized' WHERE tenant_id = ?";
+            $stmt = $conn->prepare($query);
+            $stmt->execute([$tenant_id]);
+    
+            // ✅ 7. Delete payments with status 'not paid'
+            $query = "DELETE FROM payments WHERE tenant_id = ? AND status = 'not paid'";
+            $stmt = $conn->prepare($query);
+            $stmt->execute([$tenant_id]);
+    
+            // ✅ 8. Delete maintenance requests related to the tenant
+            $query = "DELETE FROM maintenance_requests WHERE tenant_id = ?";
+            $stmt = $conn->prepare($query);
+            $stmt->execute([$tenant_id]);
+    
             $success_data = [
                 'type' => 'moveout',
                 'room_number' => $room_id

@@ -141,7 +141,6 @@ function getReasonIcon($reason) {
                             <div class="ticket-header">
                                 <div class="ticket-title">
                                     <h3><?php echo htmlspecialchars($request['reason']); ?></h3>
-                                    <span class="ticket-id">#<?php echo $request['id']; ?></span>
                                 </div>
                                 <div class="ticket-status-wrapper">
                                     <span class="ticket-status <?php echo strtolower($request['status']); ?>">
