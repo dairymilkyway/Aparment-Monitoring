@@ -8,11 +8,11 @@ include "../includes/db.php";
 include "../includes/navbar.php";
 
 // Fetch rented rooms
-$rented_room_query = "SELECT r.room_number, rr.date_approved, rr.due_date, r.price, r.id 
-                       FROM rooms r 
-                       JOIN payments p ON r.id = p.tenant_id 
-                       JOIN room_requests rr ON r.id = rr.room_id 
-                       WHERE rr.user_id = ? AND rr.status = 'approved'";
+$rented_room_query = "SELECT r.room_number, rr.date_approved, p.due_date, r.price, r.id 
+                      FROM rooms r
+                      JOIN room_requests rr ON r.id = rr.room_id
+                      JOIN payments p ON rr.id = p.tenant_id  -- Correct JOIN to link payments correctly
+                      WHERE rr.user_id = ? AND rr.status = 'approved'";
 $rented_room_stmt = $conn->prepare($rented_room_query);
 $rented_room_stmt->execute([$_SESSION['user_id']]);
 $rented_rooms = $rented_room_stmt->fetchAll(PDO::FETCH_ASSOC); // Fetch all records
@@ -27,6 +27,7 @@ $pending_requests_stmt->execute([$_SESSION['user_id']]);
 $pending_requests = $pending_requests_stmt->fetchAll(PDO::FETCH_ASSOC);
 
 $success_data = null;
+
 
 // Handle maintenance request
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['description'])) {

@@ -12,15 +12,20 @@ $rented_room = false;
 if (isset($_SESSION['user_id']) && $_SESSION['role'] == 'user') {
     $user_id = $_SESSION['user_id'];
     
-    $query = "SELECT r.*, rr.due_date, rr.date_approved FROM rooms r 
+    $query = "SELECT r.*, 
+                     p.due_date,  -- Corrected to fetch due_date from payments
+                     rr.date_approved
+              FROM rooms r
               JOIN room_requests rr ON r.id = rr.room_id
-              JOIN users u ON rr.user_id = u.id 
+              JOIN users u ON rr.user_id = u.id
+              JOIN payments p ON rr.id = p.tenant_id  -- Updated join to link payments correctly
               WHERE rr.user_id = ? AND rr.status = 'approved'";
     
     $stmt = $conn->prepare($query);
     $stmt->execute([$user_id]);
     $rented_rooms = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
 
 
 // Determine current page for active state

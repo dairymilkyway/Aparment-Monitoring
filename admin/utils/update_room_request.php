@@ -20,16 +20,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $room_request = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($room_request) {
-        // Update the room request status and set the due_date if approved
-        $query = "UPDATE room_requests SET status = ?, date_approved = NOW(), due_date = DATE_ADD(NOW(), INTERVAL 1 MONTH) WHERE id = ?";
+        // Update the room request status and set date_approved if approved
+        $query = "UPDATE room_requests SET status = ?, date_approved = NOW() WHERE id = ?";
         $stmt = $conn->prepare($query);
         $stmt->execute([$status, $request_id]);
 
         if ($status == 'Approved') {
             // Insert the renter into the tenants table with user_id
             $query = "INSERT INTO tenants (user_id, name, apartment, contact) VALUES (?, ?, ?, ?)";
-    $stmt = $conn->prepare($query);
-    $stmt->execute([$room_request['user_id'], $room_request['name'], $room_request['room_id'], $room_request['contact']]);
+            $stmt = $conn->prepare($query);
+            $stmt->execute([$room_request['user_id'], $room_request['name'], $room_request['room_id'], $room_request['contact']]);
             
             // Get the tenant ID
             $tenant_id = $conn->lastInsertId();
@@ -39,8 +39,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $stmt = $conn->prepare($query);
             $stmt->execute([$room_request['room_id']]);
             
-            // Insert the tenant payment
-            $query = "INSERT INTO payments (tenant_id, amount, status) VALUES (?, ?, 'not paid')";
+            // Insert the tenant payment with due_date in payments table
+            $query = "INSERT INTO payments (tenant_id, amount, status, due_date) VALUES (?, ?, 'not paid', DATE_ADD(NOW(), INTERVAL 1 MONTH))";
             $stmt = $conn->prepare($query);
             $stmt->execute([$tenant_id, $room_request['price']]);
 
