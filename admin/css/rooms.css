@@ -923,3 +923,37 @@
     from { transform: translateY(0); opacity: 1; }
     to { transform: translateY(20px); opacity: 0; }
   }
+  /* Modal Description Field Styles */
+.room-input-group textarea#description,
+.room-input-group textarea#edit_description {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    resize: none;
+    min-height: 80px; /* Ensures a reasonable height */
+    outline: none;
+    transition: border-color 0.2s ease-in-out;
+}
+
+/* Add focus effect */
+.room-input-group textarea#description:focus,
+.room-input-group textarea#edit_description:focus {
+    border-color: #4A90E2;
+    box-shadow: 0 0 5px rgba(74, 144, 226, 0.3);
+}
+
+/* Modal Input Group Styling */
+.room-input-group {
+    margin-bottom: 15px;
+}
+
+/* Label Styling */
+.room-input-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: #333;
+}

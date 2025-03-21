@@ -8,13 +8,14 @@ include "../../includes/db.php";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $room_id = $_POST['room_id'];
+    $description = $_POST['description'];
     $price = $_POST['price'];
     
     try {
-        // Update room
-        $query = "UPDATE rooms SET price = ? WHERE id = ?";
+        // Update room with description
+        $query = "UPDATE rooms SET description = ?, price = ? WHERE id = ?";
         $stmt = $conn->prepare($query);
-        $stmt->execute([$price, $room_id]);
+        $stmt->execute([$description, $price, $room_id]);
         
         $_SESSION['success_message'] = "Room updated successfully.";
     } catch (PDOException $e) {

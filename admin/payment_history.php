@@ -16,15 +16,17 @@
         </thead>
         <tbody>
             <?php
-            // Fetch aggregated payment history grouped by tenant
+            // Fetch aggregated payment history grouped by tenant with room_number
             $query = "SELECT 
                         ph.tenant_id,
                         ph.tenant_name, 
+                        t.apartment AS room_number,  -- Get room number
                         SUM(ph.amount_paid) AS total_amount_paid, 
                         MAX(ph.date_of_payment) AS last_payment_date, 
                         MAX(ph.move_out_date) AS move_out_date
                       FROM payment_history ph
-                      GROUP BY ph.tenant_id, ph.tenant_name
+                      JOIN tenants t ON ph.tenant_id = t.id  -- Join with tenants table
+                      GROUP BY ph.tenant_id, ph.tenant_name, t.apartment
                       ORDER BY last_payment_date DESC";
             $stmt = $conn->prepare($query);
             $stmt->execute();
@@ -37,7 +39,7 @@
                     <td>
                         <button 
                             class="btn btn-primary btn-view-details" 
-                            onclick="showPaymentHistoryModal(<?php echo $history['tenant_id']; ?>, '<?php echo htmlspecialchars($history['tenant_name']); ?>')">
+                            onclick="showPaymentHistoryModal(<?php echo $history['tenant_id']; ?>, '<?php echo htmlspecialchars($history['tenant_name']); ?>', '<?php echo htmlspecialchars($history['room_number']); ?>')">
                             <i class="fas fa-eye"></i> View Details
                         </button>
                     </td>
@@ -50,32 +52,35 @@
 <!-- Modal Structure -->
 <div id="payment-history-modal" class="modal-overlay">
     <div class="modal">
-    <div class="modal-header">
-    <h2 class="modal-title">Last Payment Details: <span id="modal-tenant-name"></span></h2>
-    <button type="button" class="modal-close" onclick="closePaymentHistoryModal()">&times;</button>
-</div>
-<div class="modal-body">
-    <div class="tenant-info">
-        <div class="label">Tenant Name:</div>
-        <h3 id="modal-tenant-name-body"></h3>
-    </div>
-    
-    <div class="payment-summary">
-        <div class="total-paid">
-            <h3>₱<span id="modal-total-amount-paid"></span></h3>
-            <div class="label">Total Amount Paid</div>
+        <div class="modal-header">
+            <h2 class="modal-title">Last Payment Details: <span id="modal-tenant-name"></span></h2>
+            <button type="button" class="modal-close" onclick="closePaymentHistoryModal()">&times;</button>
         </div>
-        <div class="last-payment">
-            <h4 id="modal-last-payment-date"></h4>
-            <div class="label">Last Payment</div>
+        <div class="modal-body">
+            <div class="tenant-info">
+                <div class="label">Tenant Name:</div>
+                <h3 id="modal-tenant-name-body"></h3>
+            </div>
+            <div class="tenant-info">
+                <div class="label">Room Number:</div>
+                <h4 id="modal-room-number"></h4>
+            </div>
+            <div class="payment-summary">
+                <div class="total-paid">
+                    <h3>₱<span id="modal-total-amount-paid"></span></h3>
+                    <div class="label">Total Amount Paid</div>
+                </div>
+                <div class="last-payment">
+                    <h4 id="modal-last-payment-date"></h4>
+                    <div class="label">Last Payment</div>
+                </div>
+            </div>
+            
+            <div class="payment-history-list">
+                <h4>Payment History</h4>
+                <ul id="modal-payment-history"></ul>
+            </div>
         </div>
-    </div>
-    
-    <div class="payment-history-list">
-        <h4>Payment History</h4>
-        <ul id="modal-payment-history"></ul>
-    </div>
-</div>
         <div class="modal-footer">
             <button type="button" class="btn-close" onclick="closePaymentHistoryModal()">
                 Close
@@ -105,17 +110,20 @@ $all_payments = $payments_stmt->fetchAll(PDO::FETCH_ASSOC);
     let currentPage = 1;
     let currentTenantPayments = [];
 
-    function showPaymentHistoryModal(tenantId, tenantName) {
+    // Show payment history modal
+    function showPaymentHistoryModal(tenantId, tenantName, roomNumber) {
         // Reset pagination
         currentPage = 1;
         
         // Get the payment history data for this tenant
         const tenant = <?php echo json_encode($payment_history); ?>.find(history => history.tenant_id == tenantId);
     
-        // Update both tenant name instances
+        // Update tenant name and room number
         document.getElementById('modal-tenant-name').textContent = tenantName;
         document.getElementById('modal-tenant-name-body').textContent = tenantName;
-        
+        document.getElementById('modal-room-number').textContent = roomNumber;
+
+        // Update total amount paid and last payment date
         document.getElementById('modal-total-amount-paid').textContent = parseFloat(tenant.total_amount_paid).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
         document.getElementById('modal-last-payment-date').textContent = new Date(tenant.last_payment_date).toLocaleString('en-US', {
             month: 'short',
@@ -136,6 +144,7 @@ $all_payments = $payments_stmt->fetchAll(PDO::FETCH_ASSOC);
         document.getElementById('payment-history-modal').classList.add('active');
     }
 
+    // Render paginated payment history
     function renderPaymentPage() {
         let paymentList = document.getElementById('modal-payment-history');
         paymentList.innerHTML = ''; // Clear previous list
@@ -200,6 +209,7 @@ $all_payments = $payments_stmt->fetchAll(PDO::FETCH_ASSOC);
         }
     }
 
+    // Close modal
     function closePaymentHistoryModal() {
         document.getElementById('payment-history-modal').classList.remove('active');
     }

@@ -32,17 +32,25 @@ $query = "SELECT DISTINCT p.id,
                  p.status, 
                  t.name, 
                  t.contact, 
-                 p.due_date,  -- Get due_date from payments
-                 rr.date_approved
+                 p.due_date,  -- Get the latest due_date from payments
+                 rr.date_approved,
+                 r.room_number  -- Get the room_number from rooms
           FROM payments p
           JOIN tenants t ON p.tenant_id = t.id
           JOIN room_requests rr ON t.apartment = rr.room_id
-          WHERE p.status != 'finalized'
-          ORDER BY p.due_date ASC";  // Order by due_date from payments
+          JOIN rooms r ON rr.room_id = r.id  -- Join rooms to get room_number
+          WHERE p.status != 'finalized' 
+          AND p.due_date = (
+              SELECT MAX(due_date) 
+              FROM payments 
+              WHERE tenant_id = p.tenant_id
+          )
+          ORDER BY p.due_date ASC";  // Order by latest due_date for all tenants
 
 $stmt = $conn->prepare($query);
 $stmt->execute();
 $payments = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 
 // Fetch maintenance requests
 $query = "SELECT * FROM maintenance_requests";

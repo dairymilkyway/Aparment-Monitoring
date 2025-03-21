@@ -8,9 +8,10 @@ include "../../includes/db.php";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $room_number = $_POST['room_number'];
+    $description = $_POST['description'];
     $price = $_POST['price'];
-    $status = 'available'; // Set status to available by default
-    
+    $status = 'available'; // Default status
+
     try {
         // Check if room_number already exists
         $check_query = "SELECT COUNT(*) FROM rooms WHERE room_number = ?";
@@ -24,10 +25,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             exit();
         }
         
-        // Insert new room
-        $query = "INSERT INTO rooms (room_number, status, price) VALUES (?, ?, ?)";
+        // Insert new room with description
+        $query = "INSERT INTO rooms (room_number, description, status, price) VALUES (?, ?, ?, ?)";
         $stmt = $conn->prepare($query);
-        $stmt->execute([$room_number, $status, $price]);
+        $stmt->execute([$room_number, $description, $status, $price]);
         
         $_SESSION['success_message'] = "Room added successfully.";
     } catch (PDOException $e) {

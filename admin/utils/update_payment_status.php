@@ -15,10 +15,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $conn->beginTransaction();
 
         // Get the current payment details, including tenant name
-        $query = "SELECT p.*, t.name AS tenant_name, rr.due_date 
+        $query = "SELECT p.*, t.name AS tenant_name, p.due_date 
                   FROM payments p 
                   JOIN tenants t ON p.tenant_id = t.id
-                  JOIN room_requests rr ON t.apartment = rr.room_id
                   WHERE p.id = ?";
         $stmt = $conn->prepare($query);
         $stmt->execute([$payment_id]);
@@ -28,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             throw new Exception("Payment not found");
         }
 
-        // Update the payment status
+        // Mark the current payment as paid
         $query = "UPDATE payments SET status = ? WHERE id = ?";
         $stmt = $conn->prepare($query);
         $stmt->execute([$status, $payment_id]);
@@ -36,19 +35,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Calculate the new due date (add 1 month to current due date)
         $currentDueDate = new DateTime($currentPayment['due_date']);
         $newDueDate = $currentDueDate->modify('+1 month')->format('Y-m-d');
-        
-        // Update the due date in room_requests table
-        $query = "UPDATE room_requests rr 
-                  JOIN tenants t ON rr.room_id = t.apartment
-                  SET rr.due_date = ?
-                  WHERE t.id = ?";
+
+        // Insert a new payment for the next month with status 'not paid'
+        $query = "INSERT INTO payments (tenant_id, amount, status, due_date) 
+                  VALUES (?, ?, 'not paid', ?)";
         $stmt = $conn->prepare($query);
-        $stmt->execute([$newDueDate, $currentPayment['tenant_id']]);
-        
-        // Insert a new payment record for the next month
-        $query = "INSERT INTO payments (tenant_id, amount, status) VALUES (?, ?, 'not paid')";
-        $stmt = $conn->prepare($query);
-        $stmt->execute([$currentPayment['tenant_id'], $currentPayment['amount']]);
+        $stmt->execute([
+            $currentPayment['tenant_id'], 
+            $currentPayment['amount'], 
+            $newDueDate
+        ]);
 
         // Insert the confirmed payment into the payment_history table
         $query = "INSERT INTO payment_history (tenant_id, tenant_name, amount_paid, date_of_payment) 

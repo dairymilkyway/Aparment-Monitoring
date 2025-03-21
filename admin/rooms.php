@@ -1,4 +1,4 @@
-<!-- filepath: /c:/xampp/htdocs/apartment-monitoring/admin/rooms.php -->
+<!-- filepath: c:\xampp\htdocs\apartment-monitoring\admin\rooms.php -->
 <div id="rooms-section" class="section">
     <h2>Manage Rooms</h2>
     
@@ -27,7 +27,7 @@
                 <td><?php echo htmlspecialchars($room['status']); ?></td>
                 <td>₱<?php echo htmlspecialchars($room['price']); ?></td>
                 <td>
-                    <button class="btn-primary" onclick="openEditRoomModal(<?php echo $room['id']; ?>, '<?php echo htmlspecialchars($room['price']); ?>')">
+                    <button class="btn-primary" onclick="openEditRoomModal(<?php echo $room['id']; ?>, '<?php echo htmlspecialchars($room['price']); ?>', '<?php echo htmlspecialchars($room['description']); ?>')">
                         <i class="fas fa-edit"></i> Edit
                     </button>
                     <button class="btn-danger" onclick="confirmDeleteRoom(<?php echo $room['id']; ?>, '<?php echo htmlspecialchars($room['room_number']); ?>')">
@@ -53,6 +53,10 @@
                         <input type="text" id="room_number" name="room_number" required>
                     </div>
                     <div class="room-input-group">
+                        <label for="description">Description</label>
+                        <textarea id="description" name="description" rows="3" required></textarea>
+                    </div>
+                    <div class="room-input-group">
                         <label for="price">Price (₱)</label>
                         <input type="number" id="price" name="price" min="0" step="0.01" required>
                     </div>
@@ -74,6 +78,10 @@
             <div class="room-modal-body">
                 <form method="POST" action="utils/update_room.php">
                     <input type="hidden" id="edit_room_id" name="room_id">
+                    <div class="room-input-group">
+                        <label for="edit_description">Description</label>
+                        <textarea id="edit_description" name="description" rows="3" required></textarea>
+                    </div>
                     <div class="room-input-group">
                         <label for="edit_price">Price (₱)</label>
                         <input type="number" id="edit_price" name="price" min="0" step="0.01" required>
@@ -115,9 +123,10 @@
             document.getElementById('add-room-modal').classList.remove('active');
         }
         
-        function openEditRoomModal(id, price) {
+        function openEditRoomModal(id, price, description) {
             document.getElementById('edit_room_id').value = id;
             document.getElementById('edit_price').value = price;
+            document.getElementById('edit_description').value = description;
             document.getElementById('edit-room-modal').classList.add('active');
         }
         
