@@ -27,7 +27,7 @@ $stmt->execute();
 $tenants = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Fetch rent payment information
-$query = "SELECT p.*, t.name, t.contact, rr.date_approved, rr.due_date 
+$query = "SELECT DISTINCT p.id, p.amount, p.status, t.name, t.contact, rr.date_approved, rr.due_date 
           FROM payments p 
           JOIN tenants t ON p.tenant_id = t.id 
           JOIN room_requests rr ON t.apartment = rr.room_id";
@@ -58,4 +58,6 @@ $query = "SELECT * FROM room_requests";
 $stmt = $conn->prepare($query);
 $stmt->execute();
 $room_requests = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
 ?>
